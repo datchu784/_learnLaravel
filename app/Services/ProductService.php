@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Models\Product;
 use App\Repositories\Interfaces\ProductRepositoryInterface;
 
+
 class ProductService
 {
     protected $productRepository;
@@ -39,4 +40,5 @@ class ProductService
     {
         return $this->productRepository->updateProduct($id, $newDetails);
     }
+
 }

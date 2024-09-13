@@ -3,6 +3,7 @@ namespace App\Repositories;
 
 use App\Models\ProductType;
 use App\Repositories\Interfaces\ProductTypeRepositoryInterface;
+use App\Services\ProductTypeService;
 use Illuminate\Database\Eloquent\Collection;
 
 class ProductTypeRepository implements ProductTypeRepositoryInterface
@@ -14,7 +15,7 @@ class ProductTypeRepository implements ProductTypeRepositoryInterface
 
     public function getProductTypeById($id): ?ProductType
     {
-        return ProductType:: findOrFail($id);
+        return ProductType:: find($id);
     }
 
     public function createProductType(array $productTypeDetails): ProductType
@@ -29,7 +30,14 @@ class ProductTypeRepository implements ProductTypeRepositoryInterface
 
     public function deleteProductType(int $id): bool
     {
-        return ProductType:: destroy($id);
+        $productType = ProductType:: find($id);
+        return $productType->delete();
+    }
+    public function existsProductType($id) : bool
+    {
+        $productType = ProductType::where('id', $id)->exists();
+        return $productType;
+
     }
 
 }

@@ -14,11 +14,12 @@ class ProductRepository implements ProductRepositoryInterface
 
     public function getProductById($id): ?Product
     {
-        return Product:: findOrFail($id);
+        return Product::findOrFail($id);
     }
 
     public function createProduct(array $productDetails): Product
     {
+
         return Product::create($productDetails);
     }
 
@@ -30,7 +31,9 @@ class ProductRepository implements ProductRepositoryInterface
 
     public function deleteProduct(int $id): bool
     {
-        return Product:: destroy($id);
+
+       $product = Product:: findOrFail($id);
+       return $product->delete();
     }
 
 }

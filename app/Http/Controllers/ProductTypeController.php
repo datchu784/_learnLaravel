@@ -15,7 +15,6 @@ class ProductTypeController extends Controller
     public function __construct(ProductTypeService $productTypeService)
     {
         $this->productTypeService = $productTypeService;
-
     }
 
     public function index()
@@ -24,7 +23,6 @@ class ProductTypeController extends Controller
             return response()->json($this->productTypeService->getAllProductTypes());
         } catch (\Throwable $th) {
             return response()->json($th);
-
         }
     }
 
@@ -35,21 +33,24 @@ class ProductTypeController extends Controller
 
     public function store(Request $request)
     {
+        $validatedData = $request->validate([
+            'name' => 'required|string|max:255',
+            'description' => 'required|string|max:255|not_in:something,cursing'
+        ]);
         $productType = $this->productTypeService->createProductType($request->all());
-        return response()->json($productType,201);
+        return response()->json($productType, 201);
     }
 
     public function update($id, Request $request)
     {
-        $productType= $this->productTypeService->updateProductType($id, $request->all());
-        return response()->json($productType,200);
+        $productType = $this->productTypeService->updateProductType($id,$request->all());
+        return response()->json($productType, 200);
+
     }
 
     public function destroy($id)
     {
-        $this->productTypeService->deleteProductType($id);
-        return response()->json(null,204);
+         $this->productTypeService->deleteProductType($id);
+        return response()->json(null, 204);
     }
-
 }
-

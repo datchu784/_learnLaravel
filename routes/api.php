@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProductTypeController;
+use App\Http\Controllers\FileController;
 
 /*
 |--------------------------------------------------------------------------
@@ -21,3 +22,4 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 Route::apiResource('products', ProductController::class);
 Route::apiResource('product-types', ProductTypeController::class);
+

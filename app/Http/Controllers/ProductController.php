@@ -43,7 +43,7 @@ class ProductController extends Controller
 
     public function destroy($id)
     {
-        $this->productService->deleteProduct($id);
+         $this->productService->deleteProduct($id);
         return response()->json(null, 204);
     }
 }

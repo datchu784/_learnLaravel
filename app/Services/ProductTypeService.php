@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Repositories\Interfaces\ProductTypeRepositoryInterface;
+use App\Exceptions\ProductTypeNotFoundException;
 use App\Models\ProductType;
 
 class ProductTypeService
@@ -24,11 +25,6 @@ class ProductTypeService
         return $this->productTypeRepository->getProductTypeById($id);
     }
 
-    public function deleteProductType($id)
-    {
-        $this->productTypeRepository->deleteProductType($id);
-    }
-
     public function createProductType(array $productTypeDetails)
     {
         return $this->productTypeRepository->createProductType($productTypeDetails);
@@ -37,5 +33,14 @@ class ProductTypeService
     public function updateProductType($id, array $newDetails)
     {
         return $this->productTypeRepository->updateProductType($id, $newDetails);
+    }
+
+    public function deleteProductType($id)
+    {
+        $productType =  $this->productTypeRepository->existsProductType($id);
+        if (!$productType) {
+            throw new ProductTypeNotFoundException($id);
+        }
+        $this->productTypeRepository->deleteProductType($id);
     }
 }

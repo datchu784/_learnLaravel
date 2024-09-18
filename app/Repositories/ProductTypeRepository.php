@@ -1,45 +1,21 @@
 <?php
+
 namespace App\Repositories;
 
 use App\Models\ProductType;
-use App\Repositories\Interfaces\ProductTypeRepositoryInterface;
-use App\Services\ProductTypeService;
-use Illuminate\Database\Eloquent\Collection;
+use App\Repositories\Interfaces\IProductTypeRepository;
 
-class ProductTypeRepository implements ProductTypeRepositoryInterface
+
+class ProductTypeRepository extends BaseRepository implements IProductTypeRepository
 {
-    public function getAllProductTypes(): Collection
+    public function __construct(ProductType $model)
     {
-        return ProductType:: all();
+        $this->model = $model;
     }
-
-    public function getProductTypeById($id): ?ProductType
+    public function updateQuantity($id, $quantity)
     {
-        return ProductType:: find($id);
+        $productType = $this->getById($id);
+        $productType->quantity += $quantity;
+        return $productType->save() ? $productType : false;
     }
-
-    public function createProductType(array $productTypeDetails): ProductType
-    {
-        return ProductType:: create($productTypeDetails);
-    }
-
-    public function updateProductType($id, array $newDetails) :bool
-    {
-        return ProductType:: where('id', $id)->update($newDetails);
-    }
-
-    public function deleteProductType(int $id): bool
-    {
-        $productType = ProductType:: find($id);
-        return $productType->delete();
-    }
-    public function existsProductType($id) : bool
-    {
-        $productType = ProductType::where('id', $id)->exists();
-        return $productType;
-
-    }
-
 }
-
-?>

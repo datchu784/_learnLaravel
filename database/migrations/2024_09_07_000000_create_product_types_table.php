@@ -16,15 +16,16 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->string('description');
+            $table->integer('quantity');
             $table->timestamps();
         });
         // Insert initial data into the product_types table
         DB::table('product_types')->insert([
-            ['name' => 'Electronics', 'description' => 'Electronic devices and accessories'],
-            ['name' => 'Clothing', 'description' => 'Apparel and fashion items'],
-            ['name' => 'Furniture', 'description' => 'Home furnishings and decor'],
-            ['name' => 'Books', 'description' => 'Literature, textbooks, and other printed materials'],
-            ['name' => 'Toys', 'description' => 'Games, puzzles, and other playthings'],
+            ['name' => 'Electronics', 'description' => 'Electronic devices and accessories','quantity'=>0],
+            ['name' => 'Clothing', 'description' => 'Apparel and fashion items', 'quantity'=>0],
+            ['name' => 'Furniture', 'description' => 'Home furnishings and decor', 'quantity'=>0],
+            ['name' => 'Books', 'description' => 'Literature, textbooks, and other printed materials', 'quantity'=>0],
+            ['name' => 'Toys', 'description' => 'Games, puzzles, and other playthings', 'quantity'=>0],
         ]);
 
 

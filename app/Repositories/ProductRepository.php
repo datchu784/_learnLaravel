@@ -1,41 +1,27 @@
 <?php
+
 namespace App\Repositories;
 
 use App\Models\Product;
-use App\Repositories\Interfaces\ProductRepositoryInterface;
-use Illuminate\Database\Eloquent\Collection;
+use App\Repositories\Interfaces\IProductRepository;
 
-class ProductRepository implements ProductRepositoryInterface
+class ProductRepository extends BaseRepository implements IProductRepository
 {
-    public function getAllProduct(): Collection
+    public function __construct(Product $model)
     {
-        return Product:: all();
+        $this->model = $model;
     }
 
-    public function getProductById($id): ?Product
+    public function search($keyword)
     {
-        return Product::findOrFail($id);
+        return $this->model->where('name', 'like', "%{$keyword}%")
+            ->orWhere('description', 'like', "%{$keyword}%")
+            ->get();
     }
-
-    public function createProduct(array $productDetails): Product
+    public function updateQuantity($id, int $quantity)
     {
-
-        return Product::create($productDetails);
+        $product = $this->getById($id);
+        $product->quantity += $quantity;
+        return $product->save() ? $product : false;
     }
-
-    public function updateProduct($id,array $newDetails) :bool
-    {
-        return Product:: where('id', $id)->update($newDetails);
-
-    }
-
-    public function deleteProduct(int $id): bool
-    {
-
-       $product = Product:: findOrFail($id);
-       return $product->delete();
-    }
-
 }
-
-?>

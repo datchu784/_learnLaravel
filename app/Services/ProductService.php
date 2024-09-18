@@ -2,43 +2,51 @@
 
 namespace App\Services;
 
-use App\Models\Product;
-use App\Repositories\Interfaces\ProductRepositoryInterface;
+use App\Repositories\BaseRepository;
+use App\Repositories\Interfaces\IProductRepository;
+use App\Repositories\Interfaces\IProductTypeRepository;
+use App\Repositories\ProductRepository;
 
+use Illuminate\Support\Facades\DB;
+use Exception;
 
-class ProductService
+class ProductService extends BaseService
 {
-    protected $productRepository;
+    public  $productTypeRepository;
 
-    public function __construct(ProductRepositoryInterface $productRepository)
+    public function __construct(
+        IProductRepository $repository,
+        IProductTypeRepository $productTypeRepository)
     {
-        $this->productRepository = $productRepository;
+        $this->repository = $repository;
+        $this->productTypeRepository = $productTypeRepository;
     }
 
-    public function getAllProduct()
+    public function searchProducts($keyword)
     {
-        return $this->productRepository->getAllProduct();
+        return $this->repository->search($keyword);
     }
 
-    public function getProductById($id)
+    public function updateQuantityProduct($id, $quantity)
     {
-        return $this->productRepository->getProductById($id);
+        DB::beginTransaction();
+        try {
+            $product = $this->repository->updateQuantity($id, $quantity);
+            $productTypeId = $product->product_type_id;
+            $productType = $this->productTypeRepository->updateQuantity($productTypeId, $quantity);
+
+            DB::commit();
+            $quantityStatistics = " {$product->name}:
+             {$product->quantity} and {$productType->name}:
+             {$productType->quantity}";
+
+            return $quantityStatistics;
+        } catch (Exception $e) {
+            DB::rollBack();
+            throw $e;
+        }
     }
-
-    public function deleteProduct($id)
-    {
-        $this->productRepository->deleteProduct($id);
-    }
-
-    public function createProduct(array $productTypeDetails)
-    {
-
-        return $this->productRepository->createProduct($productTypeDetails);
-    }
-
-    public function updateProduct($id, array $newDetails)
-    {
-        return $this->productRepository->updateProduct($id, $newDetails);
-    }
-
 }
+
+
+

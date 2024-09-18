@@ -5,52 +5,30 @@ namespace App\Http\Controllers;
 use App\Services\ProductTypeService;
 use Illuminate\Http\Request;
 use App\Http\Controllers\JsonResponse;
+use App\Http\Requests\StorePostRequest;
 use App\Models\ProductType;
 use Psr\Http\Message\ResponseInterface;
 
-class ProductTypeController extends Controller
+class ProductTypeController extends BaseApiController
 {
-    protected $productTypeService;
+    protected $service;
 
-    public function __construct(ProductTypeService $productTypeService)
+    public function __construct(ProductTypeService $service)
     {
-        $this->productTypeService = $productTypeService;
+        $this->$service = $service;
     }
 
-    public function index()
-    {
-        try {
-            return response()->json($this->productTypeService->getAllProductTypes());
-        } catch (\Throwable $th) {
-            return response()->json($th);
-        }
-    }
 
-    public function show($id)
+    public function store(StorePostRequest $request)
     {
-        return response()->json($this->productTypeService->getProductTypeById($id));
-    }
-
-    public function store(Request $request)
-    {
-        $validatedData = $request->validate([
-            'name' => 'required|string|max:255',
-            'description' => 'required|string|max:255|not_in:something,cursing'
-        ]);
-        $productType = $this->productTypeService->createProductType($request->all());
-        return response()->json($productType, 201);
-    }
-
-    public function update($id, Request $request)
-    {
-        $productType = $this->productTypeService->updateProductType($id,$request->all());
-        return response()->json($productType, 200);
+        return $this->storeBase($request);
 
     }
 
-    public function destroy($id)
+    public function update(Request $request, $id)
     {
-         $this->productTypeService->deleteProductType($id);
-        return response()->json(null, 204);
+        return $this->updateBase($request, $id);
+
     }
+
 }

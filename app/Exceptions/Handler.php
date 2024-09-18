@@ -56,6 +56,7 @@ class Handler extends ExceptionHandler
                 'errors' => $e->validator->errors()->getMessages()
             ], 422);
         }
+
         if ($e instanceof \InvalidArgumentException) {
             return response()->json([
                 'message' => 'Invalid data from client side',
@@ -75,11 +76,7 @@ class Handler extends ExceptionHandler
             ], 404);
         }
 
-        if ($e instanceof ProductTypeNotFoundException) {
-            return response()->json([
-                'message' => $e->getMessage()
-            ], 404);
-        }
+
 
 
         return response()->json([

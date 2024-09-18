@@ -4,46 +4,39 @@ namespace App\Http\Controllers;
 
 use App\Services\ProductService;
 use Illuminate\Http\Request;
-use App\Http\Controllers\JsonResponse;
-use App\Models\Product;
-use Psr\Http\Message\ResponseInterface;
-
-class ProductController extends Controller
+use Illuminate\Http\JsonResponse;
+use App\Http\Requests\ProductRequest;
+class ProductController extends BaseApiController
 {
-    protected $productService;
-
-    public function __construct(ProductService $productService)
+    public function __construct(ProductService $service)
     {
-        $this->productService = $productService;
+        $this->service = $service;
     }
 
-    public function index()
+    public function store(ProductRequest $request): JsonResponse
     {
-
-        return response()->json($this->productService->getAllProduct());
+        return $this-> storeBase($request);
     }
 
-    public function show($id)
+    public function update(ProductRequest $request, int $id): JsonResponse
     {
-        return response()->json($this->productService->getProductById($id));
+        return $this->updateBase($request, $id);
     }
 
-    public function store(Request $request)
+    public function search(Request $request): JsonResponse
     {
-         $data = $request->all();
-        $product = $this->productService->createProduct($data);
-        return response()->json($product, 201);
+        $keyword = $request->keyword;
+        $products = $this->service->searchProducts($keyword);
+        return response()->json($products);
     }
 
-    public function update($id, Request $request)
-    {
-        $product = $this->productService->updateProduct($id, $request->all());
-        return response()->json($product, 200);
-    }
 
-    public function destroy($id)
+    public function updateQuantityProduct(Request $request)
     {
-         $this->productService->deleteProduct($id);
-        return response()->json(null, 204);
+        $product = $this->service->updateQuantityProduct($request->id, $request->quantity);
+        return response()->json(null, 200);
     }
 }
+
+
+

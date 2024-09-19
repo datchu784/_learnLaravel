@@ -4,11 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\LoginRequest;
 use App\Http\Requests\RegisterRequest;
-use App\Models\User;
+
 use App\Services\UserService;
 
 use Illuminate\Support\Facades\Auth;
-use Tymon\JWTAuth\Facades\JWTAuth;
+
 
 class AuthController extends Controller
 {
@@ -23,17 +23,11 @@ class AuthController extends Controller
 
     public function login(LoginRequest $request)
     {
-        //$credentials = $request->only('email', 'password');
-        $email = $request->email;
-        $password=$request->password;
-        $user= User:: where('email',$email)->where('password',$password)->first();
-        if (!$user) {
+        
+        $token = $this->_service->login($request->email, $request->password);
+
+        if (!$token) {
             return response()->json(['error' => 'Unauthorized'], 401);
-        }
-        else
-        {
-           // phai la 1 array
-            $token = JWTAuth::customClaims(['sub='>$user->id])->fromUser($user);
         }
 
         return $this->respondWithToken($token);
@@ -43,23 +37,13 @@ class AuthController extends Controller
     {
 
         $data = $request->all();
-        // $request->validate();
-
-        $user = $this->_service->create($data);
-
-        $token = JWTAuth::customClaims(['sub=' > $user->id])->fromUser($user);
-        //return $user->id;
-
+        $token = $this->_service->register($data);
         return $this->respondWithToken($token);
     }
 
     public function logout()
     {
         Auth::logout();
-
-        // request()->session()->invalidate();
-
-        // request()->session()->regenerateToken();
         return response()->json(['message' => 'Successfully logged out'],200);
     }
 

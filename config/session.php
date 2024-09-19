@@ -100,7 +100,7 @@ return [
     |
     */
 
-    'store' => env('SESSION_STORE', null),
+    'store' => env('SESSION_STORE', 'file'),
 
     /*
     |--------------------------------------------------------------------------

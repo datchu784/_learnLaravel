@@ -26,25 +26,13 @@ abstract class BaseApiController extends Controller
 
     public function storeBase(Request $request): JsonResponse
     {
-        if ($request instanceof Request)
-        {
-            $validated = $request->validated();
-            $data = $validated;
-        }
-         else
-        {
-            return response()->json(['error' => 'Invalid request'], 400);
-        }
-
+        $data = $request->all();
         $item = $this->service->create($data);
         return response()->json($item, 201);
-
-
     }
 
     public function updateBase(Request $request, $id): JsonResponse
     {
-        $validated = $request->validated();
         $data = $request->all();
         $item = $this->service->update($id, $data);
         return response()->json($item, 200);

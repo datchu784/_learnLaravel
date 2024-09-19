@@ -2,25 +2,44 @@
 
 namespace App\Services;
 
-use App\Repositories\UserRepository;
+use App\Repositories\Interfaces\IUserRepository;
+use Tymon\JWTAuth\Facades\JWTAuth;
+
 
 
 class UserService extends BaseService
 {
-    public function __construct(UserRepository $repository)
+    public function __construct(IUserRepository $repository)
     {
         $this->repository = $repository;
     }
 
-    public function register($data)
+    public function login(string $email, string $password)
     {
-        // $result = $this->repository->create($data);
-        // return $result;
+        $user = $this->repository->login($email, $password);
+
+        if (!$user) {
+            return null;
+        }
+
+        $token = $this->createToken($user);
+        return $token;
+    }
+    public function register(array $data)
+    {
+        $user = $this->create($data);
+
+        $token =$this->createToken($user);
+
+        return $token;
     }
 
-    public function test()
+    public function createToken($user)
     {
-        return 'ok';
+        $token = JWTAuth::customClaims(['sub=' > $user])->fromUser($user);
 
+        return $token;
     }
+
+
 }

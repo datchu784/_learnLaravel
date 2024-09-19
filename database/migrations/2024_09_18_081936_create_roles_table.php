@@ -16,7 +16,6 @@ class CreateRolesTable extends Migration
         Schema::create('roles', function (Blueprint $table) {
             $table->id();
             //cascade: khoa chinh ben user bi khoa se xoa cac phan tu lien quan
-            $table->foreignId('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->string('name')->unique();
             $table->text('description')->nullable();
             $table->timestamps();

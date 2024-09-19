@@ -2,7 +2,7 @@
 
 namespace App\Repositories\Interfaces;
 
-use App\Models\Product;
+
 
 
 interface IProductRepository

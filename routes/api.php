@@ -37,6 +37,12 @@ Route::group([
     Route::post('logout', [AuthController::class, 'logout']);
 });
 
+Route::group([
+    'middleware' => ['auth:api', 'check.role:manage-roles'],
+], function ($router) {
+    Route::apiResource('roles', RoleController::class);
+});
+
 
 
 

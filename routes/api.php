@@ -20,27 +20,23 @@ Route::group([
 });
 
 Route::group([
-    'middleware' => ['auth:api', 'check.role:manage-roles'],
-    'prefix' => 'users'
+    'middleware' => ['auth:api', 'check.role:manage-roles']
 ], function ($router) {
-    Route::apiResource('', UserController::class);
-    Route::put('is-admin/{id}', [UserController::class, 'isAdmin']);
+    Route::apiResource('users', UserController::class);
+    Route::put('users/is-admin/{id}', [UserController::class, 'isAdmin']);
+});
+
+Route::group([
+    'middleware' => ['auth:api', 'check.role:manage-roles']
+], function ($router) {
+    Route::apiResource('roles', RoleController::class);
 });
 
 Route::group([
     'middleware' => ['auth:api', 'check.role:manage-roles'],
-    'prefix' => 'roles'
 ], function ($router) {
-    Route::apiResource('', RoleController::class);
-});
-
-
-Route::group([
-    'middleware' => ['auth:api', 'check.role:manage-roles'],
-    'prefix' => 'products'
-], function ($router) {
-    Route::apiResource('', ProductController::class)->except(['index','show']);
-    Route::put('quantity', [ProductController::class, 'updateQuantityProduct']);
+    Route::apiResource('products', ProductController::class)->except(['index','show']);
+    Route::put('products/quantity', [ProductController::class, 'updateQuantityProduct']);
 });
 Route::get('products', [ProductController::class, 'index']);
 Route::get('products/{id}', [ProductController::class, 'show']);

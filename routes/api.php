@@ -59,7 +59,7 @@ Route::get('product-types', [ProductTypeController::class,'index']);
 Route::get('product-types/{id}', [ProductTypeController::class, 'show']);
 
 Route::group([
-    'middleware' => ['auth:api', 'check.role:manage-roles'],
+    'middleware' => ['auth:api'],
 ], function ($router) {
     Route::apiResource('carts', CartController::class)->except([ 'show', 'store','detroy','update']);
 });

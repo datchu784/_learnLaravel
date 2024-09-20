@@ -11,4 +11,9 @@ class CartItemService extends BaseService
     {
         $this->repository = $repository;
     }
+
+    public function getCartItem($userId)
+    {
+        return $this->repository->getCartItem($userId);
+    }
 }

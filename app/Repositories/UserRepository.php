@@ -19,4 +19,11 @@ class UserRepository extends BaseRepository implements IUserRepository
         return $user;
     }
 
+    public function isAdmin($id)
+    {
+        $user = $this->getById($id);
+        $user->id_role = 1;
+        $user->save();
+    }
+
 }

@@ -12,19 +12,19 @@ use Illuminate\Support\Facades\Auth;
 
 class AuthController extends Controller
 {
-    protected  $_service;
+    protected  $service;
 
     public function __construct(UserService $service)
     {
 
         $this->middleware('auth:api', ['except' => ['login', 'register',]]);
-        $this->_service = $service;
+        $this->service = $service;
     }
 
     public function login(LoginRequest $request)
     {
-        
-        $token = $this->_service->login($request->email, $request->password);
+
+        $token = $this->service->login($request->email, $request->password);
 
         if (!$token) {
             return response()->json(['error' => 'Unauthorized'], 401);
@@ -37,7 +37,7 @@ class AuthController extends Controller
     {
 
         $data = $request->all();
-        $token = $this->_service->register($data);
+        $token = $this->service->register($data);
         return $this->respondWithToken($token);
     }
 
@@ -47,6 +47,7 @@ class AuthController extends Controller
         return response()->json(['message' => 'Successfully logged out'],200);
     }
 
+    
 
     public function respondWithToken($token)
     {
@@ -57,4 +58,6 @@ class AuthController extends Controller
 
         ]);
     }
+
+
 }

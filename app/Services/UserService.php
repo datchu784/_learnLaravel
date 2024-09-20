@@ -49,5 +49,11 @@ class UserService extends BaseService
         return $token;
     }
 
+    public function isAdmin($id)
+    {
+        $this->repository->isAdmin($id);
+
+    }
+
 
 }

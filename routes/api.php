@@ -1,11 +1,12 @@
 <?php
 
-use Illuminate\Http\Request;
+
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProductTypeController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\RoleController;
+use App\Models\Product;
 
 /*
 |--------------------------------------------------------------------------
@@ -21,12 +22,6 @@ use App\Http\Controllers\RoleController;
 // Route::middleware('auth:api')->get('/user', function (Request $request) {
 //     return $request->user();
 // });
-// Route::apiResource('products', ProductController::class);
-Route::apiResource('product-types', ProductTypeController::class);
-
-Route::get('/products/search', [ProductController::class, 'search']);
-Route::put('/products/quantity',[ProductController::class, 'updateQuantityProduct']);
-Route::apiResource('products', ProductController::class);
 
 Route::group([
     'middleware' => 'api',
@@ -42,6 +37,29 @@ Route::group([
 ], function ($router) {
     Route::apiResource('roles', RoleController::class);
 });
+
+Route::group([
+    'middleware' => ['auth:api', 'check.role:manage-roles'],
+], function ($router) {
+    Route::apiResource('products', ProductController::class)->except(['index','show']);
+    Route::put('/products/quantity', [ProductController::class, 'updateQuantityProduct']);
+});
+Route::get('products', [ProductController::class, 'index']);
+Route::get('products/{id}', [ProductController::class, 'show']);
+Route::get('/products/search', [ProductController::class, 'search']);
+
+
+Route::group([
+    'middleware' => ['auth:api', 'check.role:manage-roles'],
+], function ($router) {
+    Route::apiResource('product-types', ProductTypeController::class)->except(['index', 'show']);
+});
+Route::get('product-types', [ProductTypeController::class,'index']);
+Route::get('product-types/{id}', [ProductTypeController::class, 'show']);
+
+
+
+
 
 
 

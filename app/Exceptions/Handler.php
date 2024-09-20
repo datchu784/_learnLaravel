@@ -6,7 +6,10 @@ use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use App\Exceptions\ProductTypeNotFoundException;
+use Illuminate\Auth\Access\AuthorizationException;
+use Illuminate\Database\Eloquent\RelationNotFoundException;
+use Illuminate\Database\QueryException;
+use Illuminate\Validation\UnauthorizedException;
 use Throwable;
 
 class Handler extends ExceptionHandler
@@ -57,31 +60,53 @@ class Handler extends ExceptionHandler
             ], 422);
         }
 
-        if ($e instanceof \InvalidArgumentException) {
+        else if ($e instanceof \InvalidArgumentException) {
             return response()->json([
                 'message' => 'Invalid data from client side',
                 'error' => $e->getMessage(),
             ], 400);
         }
 
-        if ($e instanceof ModelNotFoundException) {
+        else if ($e instanceof AuthorizationException) {
+            return response()->json([
+                'message' => 'Not authorized to request.',
+                'error' => $e->getMessage()
+            ], 403);
+        }
+        else if ($e instanceof UnauthorizedException) {
+            return response()->json([
+                'message' => 'Not authenticated.',
+                'error' => $e->getMessage()
+            ], 401);
+        }
+        else if ($e instanceof QueryException) {
+            return response()->json([
+                'message' => 'An error occurred during a database query..',
+                'error' => $e->getMessage()
+            ], 500);
+        }
+        else if ($e instanceof RelationNotFoundException) {
+            return response()->json([
+                'message' => 'Relation Not Found',
+                'error' => $e->getMessage()
+            ], 404);
+        }
+
+        else if ($e instanceof ModelNotFoundException) {
             return response()->json([
                 'message' => 'Resource not found in database.'
             ], 404);
         }
 
-        if ($e instanceof NotFoundHttpException) {
+        else if ($e instanceof NotFoundHttpException) {
             return response()->json([
-                'message' => 'The requested resource was not found.'
+                'message' => 'The requested resource was not found.',
+                'error' => $e->getMessage()
             ], 404);
         }
-
-
-
-
         return response()->json([
-            'message' => 'An error occurred during processing.',
+            'message' => 'Front-end Error.',
             'error' => $e->getMessage()
-        ], 500);
+        ], 400);
     }
 }

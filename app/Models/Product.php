@@ -17,8 +17,13 @@ class Product extends Model
         'product_type_id'
     ];
 
-    public function ProductType(): BelongsTo
+    public function productType(): BelongsTo
     {
         return $this->belongsTo(ProductType::class);
+    }
+
+    public function cartItem()
+    {
+        return $this->hasMany(Product::class);
     }
 }

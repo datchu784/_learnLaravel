@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProductTypeController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\CartController;
 use App\Http\Controllers\RoleController;
 use App\Models\Product;
 
@@ -56,6 +57,12 @@ Route::group([
 });
 Route::get('product-types', [ProductTypeController::class,'index']);
 Route::get('product-types/{id}', [ProductTypeController::class, 'show']);
+
+Route::group([
+    'middleware' => ['auth:api', 'check.role:manage-roles'],
+], function ($router) {
+    Route::apiResource('carts', CartController::class)->except([ 'show', 'store','detroy','update']);
+});
 
 
 

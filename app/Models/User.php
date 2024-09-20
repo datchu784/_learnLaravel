@@ -11,13 +11,10 @@ class User extends Authenticatable implements JWTSubject
     use Notifiable;
 
 
-    protected $fillable = ['name', 'email', 'password'];
+    protected $fillable = ['name', 'email', 'password','id_role'];
 
     protected $hidden = ['password', 'remember_token'];
 
-    protected $cast = [
-        'is_admin' => 'boolean',
-    ];
 
     // 2 method của interface
     public function getJWTIdentifier()
@@ -32,6 +29,16 @@ class User extends Authenticatable implements JWTSubject
 
     public function roles()
     {
-        return $this->hasMany(Role::class);
+        return $this->belongsTo(Role::class);
+    }
+
+    public function cart()
+    {
+        return $this->hasOne(Cart::class);
+    }
+
+    public function orders()
+    {
+        return $this->hasMany(Order::class);
     }
 }

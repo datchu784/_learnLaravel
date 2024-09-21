@@ -39,7 +39,7 @@ abstract class BaseRepository
         return $this->model->destroy($id);
     }
 
-    public function paginate($perPage = 15)
+    public function paginate($perPage = 4)
     {
         return $this->model->paginate($perPage);
     }

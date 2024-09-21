@@ -31,7 +31,7 @@ abstract class BaseService
         return $this->repository->delete($id);
     }
 
-    public function paginate($perPage = 15)
+    public function paginate($perPage = 4)
     {
         return $this->repository->paginate($perPage);
     }

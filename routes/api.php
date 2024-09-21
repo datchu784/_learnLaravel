@@ -16,48 +16,25 @@ Route::group([
     Route::post('login', [AuthController::class, 'login']);
     Route::post('register', [AuthController::class, 'register']);
     Route::post('logout', [AuthController::class, 'logout']);
-
 });
 
 Route::group([
     'middleware' => ['auth:api', 'check.role:manage-roles']
 ], function ($router) {
+    Route::get('users/self', [UserController::class, 'getSelf']);
     Route::apiResource('users', UserController::class);
     Route::put('users/is-admin/{id}', [UserController::class, 'isAdmin']);
-});
-
-Route::group([
-    'middleware' => ['auth:api', 'check.role:manage-roles']
-], function ($router) {
     Route::apiResource('roles', RoleController::class);
+    Route::apiResource('products', ProductController::class)->except(['index', 'show']);
+    Route::put('products/quantity', [ProductController::class, 'updateQuantityProduct']);
+    Route::apiResource('product-types', ProductTypeController::class)->except(['index', 'show']);
 });
 
-Route::group([
-    'middleware' => ['auth:api', 'check.role:manage-roles'],
-], function ($router) {
-    Route::apiResource('products', ProductController::class)->except(['index','show']);
-    Route::put('products/quantity', [ProductController::class, 'updateQuantityProduct']);
-});
 Route::get('products', [ProductController::class, 'index']);
 Route::get('products/{id}', [ProductController::class, 'show']);
 Route::get('/products/search', [ProductController::class, 'search']);
 
-
-Route::group([
-    'middleware' => ['auth:api', 'check.role:manage-roles'],
-], function ($router) {
-    Route::apiResource('product-types', ProductTypeController::class)->except(['index', 'show']);
-});
-Route::get('product-types', [ProductTypeController::class,'index']);
+Route::get('product-types', [ProductTypeController::class, 'index']);
 Route::get('product-types/{id}', [ProductTypeController::class, 'show']);
 
-Route::get('carts', [CartController::class,'get'])->middleware('auth:api');
-
-
-
-
-
-
-
-
-
+Route::get('carts', [CartController::class, 'get'])->middleware('auth:api');

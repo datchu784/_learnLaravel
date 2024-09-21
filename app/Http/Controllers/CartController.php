@@ -16,13 +16,13 @@ class CartController extends Controller
     }
     public function get()
     {
-        $userId = auth()->id();
-        $cart = $this->service->getCart($userId);
+        //$userId = auth()->id();
+        $cart = $this->service->getCart();
         return response()->json($cart, 200);
     }
 
 
-   
+
 
 
 }

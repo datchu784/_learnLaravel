@@ -6,7 +6,7 @@ namespace App\Http\Controllers;
 use App\Services\CartItemService;
 
 
-class CartItemItemController extends Controller
+class CartItemController extends Controller
 {
     private $service;
 
@@ -16,8 +16,7 @@ class CartItemItemController extends Controller
     }
     public function get()
     {
-        $userId = auth()->id();
-        $cart = $this->service->getCartItem($userId);
+        $cart = $this->service->getCartItem();
         return response()->json($cart, 200);
     }
 }

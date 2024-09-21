@@ -2,10 +2,10 @@
 
 namespace App\Services;
 
-use App\Repositories\BaseRepository;
+
 use App\Repositories\Interfaces\IProductRepository;
 use App\Repositories\Interfaces\IProductTypeRepository;
-use App\Repositories\ProductRepository;
+
 
 use Illuminate\Support\Facades\DB;
 use Exception;

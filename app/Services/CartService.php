@@ -14,8 +14,9 @@ class CartService extends BaseService
         $this->repository = $repository;
     }
 
-    public function getCart($userId)
+    public function getCart()
     {
+        $userId = auth()->id();
         return $this->repository->getCart($userId);
     }
 }

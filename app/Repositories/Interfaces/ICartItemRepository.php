@@ -9,4 +9,5 @@ interface ICartItemRepository
     public function create(array $dataDetails);
     public function update($id, array $newDetails);
     public function delete(int $id);
+    public function getCartItem($cartId);
 }

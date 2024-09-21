@@ -4,18 +4,17 @@ namespace App\Http\Controllers;
 
 use App\Services\ProductTypeService;
 use Illuminate\Http\Request;
-use App\Http\Controllers\JsonResponse;
+
 use App\Http\Requests\StorePostRequest;
-use App\Models\ProductType;
-use Psr\Http\Message\ResponseInterface;
+
 
 class ProductTypeController extends BaseApiController
 {
-    protected $service;
+    //protected $service;
 
     public function __construct(ProductTypeService $service)
     {
-        $this->$service = $service;
+        $this->service = $service;
     }
 
 

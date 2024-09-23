@@ -6,7 +6,7 @@ namespace App\Repositories;
 
 abstract class BaseRepository
 {
-    protected  $model;
+    public  $model;
 
     public function getAll()
     {

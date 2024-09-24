@@ -39,4 +39,4 @@ Route::get('product-types', [ProductTypeController::class, 'index']);
 Route::get('product-types/{id}', [ProductTypeController::class, 'show']);
 
 Route::get('carts', [CartController::class, 'get'])->middleware('auth:api');
-Route::get('cart-items', [CartItemController::class, 'get'])->middleware('auth:api');
+Route::apiResource('cart-items', CartItemController::class)->middleware('auth:api');

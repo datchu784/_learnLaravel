@@ -37,7 +37,7 @@ class UserService extends BaseService
 
 
         $userIdArray = ['user_id' => $user->id];
-        $this->cartRepo->create($userIdArray);
+        $this->cartRepo->createForUser($userIdArray);
 
         return $token;
     }

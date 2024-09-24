@@ -2,21 +2,26 @@
 
 namespace App\Http\Controllers;
 
-
+use App\Http\Requests\CartItemRequest;
 use App\Services\CartItemService;
 
 
-class CartItemController extends Controller
+class CartItemController extends BaseApiController
 {
-    private $service;
-
     public function __construct(CartItemService $service)
     {
         $this->service = $service;
     }
-    public function get()
+    // public function get()
+    // {
+    //     $cart = $this->service->getCartItem();
+    //     return response()->json($cart, 200);
+    // }
+
+    public function store(CartItemRequest $request)
     {
-        $cart = $this->service->getCartItem();
-        return response()->json($cart, 200);
+        return $this->storeBase($request);
     }
+
+
 }

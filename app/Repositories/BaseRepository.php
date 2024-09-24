@@ -2,8 +2,6 @@
 
 namespace App\Repositories;
 
-
-
 abstract class BaseRepository
 {
     public  $model;
@@ -42,5 +40,35 @@ abstract class BaseRepository
     public function paginate($perPage = 4)
     {
         return $this->model->paginate($perPage);
+    }
+
+    public function getForUser($userId)
+    {
+        return $this->model->where('user_id', $userId);
+    }
+
+    public function getAllForUser($userId)
+    {
+        return $this->getForUser($userId)->get();
+    }
+
+    public function getByIdForUser($id, $userId)
+    {
+        return $this->getForUser($userId)->find($id);
+    }
+
+    public function updateForUser($id, array $data,$userId)
+    {
+        $record = $this->model->where('user_id', $userId)->find($id);
+        if ($record) {
+            $record->update($data);
+            return $record;
+        }
+        return null;
+    }
+
+    public function deleteForUser($id, $userId)
+    {
+        return $this->model->where('user_id', $userId)->where('id', $id)->delete();
     }
 }

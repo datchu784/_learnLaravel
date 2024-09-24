@@ -14,10 +14,34 @@ class CartItemService extends BaseService
         $this->cartRepo = $cartRepo;
     }
 
-    public function getCartItem()
+    // public function getCartItem()
+    // {
+    //     $userId = $this->getCurrentUserId();
+    //     $cart = $this->cartRepo->getCart($userId);
+    //     return $this->repository->getCartItem($cart->id);
+    // }
+
+    public function getAllForCurrentUser()
     {
-        $userId = auth()->id();
-        $cart = $this->cartRepo->getCart($userId);
-        return $this->repository->getCartItem($cart->id);
+        $userId = $this->getCurrentUserId();
+        $cart = $this->cartRepo->getAllForUser($userId);
+        $cartItem = $this->repository->model->where('cart_id', $cart->first()->id)->get();
+        return $cartItem;
+
     }
+
+    public function createForCurrentUser(array $data)
+    {
+        $userId = $this->getCurrentUserId();
+        $cart = $this->cartRepo->getAllForUser($userId);
+        if ($cart) {
+            $data['cart_id'] = $cart->first()->id;
+        }
+        return $this->repository->create($data);
+    }
+
+
+
+
+
 }

@@ -8,6 +8,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\CartItemController;
 use App\Http\Controllers\OrderController;
+use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserController;
 
@@ -26,8 +27,7 @@ Route::group([
     Route::get('orders/index',[OrderController::class, 'indexAuthenticated']);
     Route::get('orders/show/{id}', [OrderController::class, 'showAuthenticated']);
     Route::delete('orders/{id}', [OrderController::class, 'destroyAuthenticated']);
-
-
+    Route::get('payment', [PaymentController::class, 'store']);
 });
 
 Route::group([

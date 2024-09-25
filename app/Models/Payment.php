@@ -12,8 +12,13 @@ class Payment extends Model
 
     protected $fillable = ['order_id', 'amount', 'payment_method', 'status'];
 
-    public function order()
+    public function sender()
     {
-        return $this->belongsTo(Order::class);
+        return $this->belongsTo(User::class);
+    }
+
+    public function recipient()
+    {
+        return $this->belongsTo(User::class);
     }
 }

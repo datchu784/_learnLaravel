@@ -31,13 +31,14 @@ class UserService extends BaseService
     public function register(array $data)
     {
         $data['id_role'] = 2;
+        $data['money']= 1;
         $user = $this->create($data);
 
         $token =$this->createToken($user);
 
 
         $userIdArray = ['user_id' => $user->id];
-        $this->cartRepo->createForUser($userIdArray);
+        $this->cartRepo->create($userIdArray);
 
         return $token;
     }

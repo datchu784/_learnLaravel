@@ -12,14 +12,12 @@ class OrderService extends BaseService
         $this->repository = $repository;
     }
 
-    public function joinOrderDetail()
-    {
-        $order = $this->repository->model
-        ->leftJoin('orders', 'order_details.order_id','=', 'orders.id')
-        ->select('orders.*')
-        ->get();
 
-        $order->orderDetails;
+    public function getByIdForCurrentUser($id)
+    {
+        $userId = $this->getCurrentUserId();
+        $orderDetail = $this->repository->joinOrderDetail($id, $userId);
+        return $orderDetail;
     }
-    
+
 }

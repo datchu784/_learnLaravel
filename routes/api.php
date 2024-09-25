@@ -23,6 +23,10 @@ Route::group([
     'middleware' => ['auth:api']
 ], function ($router) {
     Route::get('users/self', [UserController::class, 'getSelf']);
+    Route::get('orders/index',[OrderController::class, 'indexAuthenticated']);
+    Route::get('orders/show/{id}', [OrderController::class, 'showAuthenticated']);
+    Route::delete('orders/{id}', [OrderController::class, 'destroyAuthenticated']);
+
 
 });
 
@@ -35,7 +39,7 @@ Route::group([
     Route::put('products/quantity', [ProductController::class, 'updateQuantityProduct']);
     Route::apiResource('products', ProductController::class)->except(['index', 'show']);
     Route::apiResource('product-types', ProductTypeController::class)->except(['index', 'show']);
-    Route::apiResource('order', OrderController::class)->except('store', 'update', 'destroy');
+    Route::apiResource('orders', OrderController::class)->except(['store', 'update', 'destroy']);
 });
 
 
@@ -49,4 +53,4 @@ Route::get('product-types/{id}', [ProductTypeController::class, 'show']);
 Route::get('carts', [CartController::class, 'get'])->middleware('auth:api');
 Route::apiResource('cart-items', CartItemController::class)->middleware('auth:api');
 
-Route::apiResource('order', OrderController::class)->except('store', 'update')->middleware('auth:api');
+

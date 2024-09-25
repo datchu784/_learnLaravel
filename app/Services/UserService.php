@@ -56,5 +56,12 @@ class UserService extends BaseService
 
     }
 
+    public function updateBySelf(array $data)
+    {
+        $userId = $this->getCurrentUserId();
+        $user = $this->update($userId, $data );
+        return $user;
+    }
+
 
 }

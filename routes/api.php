@@ -28,6 +28,7 @@ Route::group([
     Route::get('orders/show/{id}', [OrderController::class, 'showAuthenticated']);
     Route::delete('orders/{id}', [OrderController::class, 'destroyAuthenticated']);
     Route::post('payments', [PaymentController::class, 'store']);
+    Route:: put('users/self',[UserController:: class, 'updateBySelf']);
 });
 
 Route::group([

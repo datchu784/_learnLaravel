@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-
+use App\Http\Requests\UserEditRequest;
 use App\Http\Requests\UserRequest;
 use App\Services\UserService;
 use Illuminate\Http\JsonResponse;
@@ -31,6 +31,12 @@ class UserController extends BaseApiController
     public function getSelf()
     {
         $userId = auth()->user();
+        return $userId;
+    }
+
+    public function updateBySelf(UserEditRequest $request)
+    {
+        $userId = $this->service->updateBySelf($request);
         return $userId;
     }
 

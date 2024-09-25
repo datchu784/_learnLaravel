@@ -17,10 +17,28 @@ class CartItemController extends BaseApiController
     //     $cart = $this->service->getCartItem();
     //     return response()->json($cart, 200);
     // }
+    public function index()
+    {
+       $cartItems =  $this->indexAuthenticated();
+
+        return response()->json($cartItems);
+    }
+
+    public function show($id)
+    {
+        $cartItem =  $this->showAuthenticated($id);
+
+        return response()->json($cartItem);
+    }
 
     public function store(CartItemRequest $request)
     {
         return $this->storeBase($request);
+    }
+
+    public function update(CartItemRequest $request, int $id)
+    {
+        return $this->updateBase($request, $id);
     }
 
 

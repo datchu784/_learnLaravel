@@ -39,7 +39,7 @@ abstract class BaseService
     public function getAllForCurrentUser()
     {
         $userId = $this->getCurrentUserId();
-        return $userId ? $this->repository->getAllForUser($userId) : [];
+        return $userId ? $this->repository->getAllForUser($userId) : null;
     }
 
     public function getByIdForCurrentUser($id)
@@ -60,7 +60,7 @@ abstract class BaseService
     public function updateForCurrentUser($id, array $data)
     {
         $userId = $this->getCurrentUserId();
-        return $this->repository->updateForUse($id, $data,$userId);
+        return $this->repository->updateForUser($id, $data,$userId);
     }
 
     public function deleteForCurrentUser($id)

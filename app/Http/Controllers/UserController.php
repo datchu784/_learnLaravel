@@ -30,8 +30,8 @@ class UserController extends BaseApiController
 
     public function getSelf()
     {
-        $userId = auth()->id();
-        return $this->show($userId);
+        $userId = auth()->user();
+        return $userId;
     }
 
 

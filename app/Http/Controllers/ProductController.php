@@ -15,7 +15,7 @@ class ProductController extends BaseApiController
 
     public function store(ProductRequest $request): JsonResponse
     {
-        return $this-> storeBase($request);
+        return $this->storeBase($request);
     }
 
     public function update(ProductRequest $request, int $id): JsonResponse

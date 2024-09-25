@@ -24,10 +24,18 @@ class CartItemService extends BaseService
     public function getAllForCurrentUser()
     {
         $userId = $this->getCurrentUserId();
+
         $cart = $this->cartRepo->getAllForUser($userId);
+
         $cartItem = $this->repository->model->where('cart_id', $cart->first()->id)->get();
         return $cartItem;
 
+    }
+
+    public function getByIdForCurrentUser($id)
+    {
+        $cartItem = $this->getAllForCurrentUser();
+        return $cartItem->find($id);
     }
 
     public function createForCurrentUser(array $data)
@@ -38,6 +46,22 @@ class CartItemService extends BaseService
             $data['cart_id'] = $cart->first()->id;
         }
         return $this->repository->create($data);
+    }
+
+    public function updateForCurrentUser($id, array $data)
+    {
+        $userId = $this->getCurrentUserId();
+        $cart = $this->cartRepo->getAllForUser($userId);
+        if ($cart) {
+            $data['cart_id'] = $cart->first()->id;
+        }
+        return $this->repository->update($id, $data);
+    }
+
+    public function deleteForCurrentUser($id)
+    {
+        $cartItem = $this->getAllForCurrentUser();
+        return $cartItem->find($id)->delete();
     }
 
 

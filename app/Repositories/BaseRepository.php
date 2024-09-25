@@ -2,6 +2,8 @@
 
 namespace App\Repositories;
 
+use App\Models\QueryBuilder;
+
 abstract class BaseRepository
 {
     public  $model;
@@ -44,7 +46,7 @@ abstract class BaseRepository
 
     public function getForUser($userId)
     {
-        return $this->model->where('user_id', $userId);
+            return $this->model->where('user_id', $userId);
     }
 
     public function getAllForUser($userId)
@@ -59,16 +61,19 @@ abstract class BaseRepository
 
     public function updateForUser($id, array $data,$userId)
     {
-        $record = $this->model->where('user_id', $userId)->find($id);
-        if ($record) {
-            $record->update($data);
-            return $record;
+
+         $record = $this->getForUser($userId)->find($id);
+        if ($record)
+        {
+                $record->update($data);
+                return $record;
         }
+
         return null;
     }
 
     public function deleteForUser($id, $userId)
     {
-        return $this->model->where('user_id', $userId)->where('id', $id)->delete();
+        return $this->getForUser($userId)->where('id', $id)->delete();
     }
 }

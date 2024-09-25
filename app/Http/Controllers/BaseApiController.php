@@ -46,7 +46,7 @@ abstract class BaseApiController extends Controller
 
     public function indexAuthenticated()
     {
-        //$this->middleware('auth');
+        $this->middleware('auth');
         $items = $this->service->getAllForCurrentUser();
         return response()->json($items);
     }

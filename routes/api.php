@@ -27,7 +27,7 @@ Route::group([
     Route::get('orders/index',[OrderController::class, 'indexAuthenticated']);
     Route::get('orders/show/{id}', [OrderController::class, 'showAuthenticated']);
     Route::delete('orders/{id}', [OrderController::class, 'destroyAuthenticated']);
-    Route::get('payment', [PaymentController::class, 'store']);
+    Route::post('payments', [PaymentController::class, 'store']);
 });
 
 Route::group([

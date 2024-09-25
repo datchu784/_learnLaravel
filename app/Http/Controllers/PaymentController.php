@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\PaymentRequest;
 use App\Services\PaymentService;
 
 
@@ -12,4 +13,10 @@ class PaymentController extends BaseApiController
     {
         $this->service = $service;
     }
+
+    public function store(PaymentRequest $request)
+    {
+        return $this->storeBase($request);
+    }
+
 }

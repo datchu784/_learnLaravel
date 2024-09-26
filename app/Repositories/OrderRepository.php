@@ -16,16 +16,22 @@ class OrderRepository extends BaseRepository implements IOrderRepository
     public function joinOrderDetail($id, $userId)
     {
         $order = $this->model
-            ->where('user_id', $userId)
-            ->where('orders.id', $id)
-            ->leftJoin('order_details', 'order_details.order_id', '=', 'orders.id')
-            ->select('orders.*')
-            ->first();
+        ->where('user_id', $userId)
+        ->where('orders.id', $id)
+        ->leftJoin('order_details', 'order_details.order_id', '=', 'orders.id')
+        ->leftJoin('products', 'products.id', '=', 'order_details.product_id')
+        ->select('orders.*')
+        ->first();
+
         if ($order) {
-            $order->orderDetails;
+           
+            $order->load('orderDetails.product');
+            return $order;
+        } else {
+            return null;
         }
-        return $order;
+
     }
 
-   
+
 }

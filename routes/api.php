@@ -27,7 +27,6 @@ Route::group([
     'middleware' => ['auth:api']
 ], function ($router) {
     Route::get('carts', [CartController::class, 'get']);
-    //Route::put('cart-items/{id}',[CartItemController::class,'updateQuantity']);
     Route::apiResource('cart-items', CartItemController::class);
     Route::get('users/self', [UserController::class, 'getSelf']);
     Route::get('orders/index',[OrderController::class, 'indexAuthenticated']);

@@ -8,5 +8,6 @@ interface IOrderRepository
     public function getByIdForUser($id, $userId);
     public function create(array $dataDetails);
     public function deleteForUser($id, $userId);
+    public function joinOrderDetail($id, $userId);
 
 }

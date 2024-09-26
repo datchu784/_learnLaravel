@@ -42,11 +42,23 @@ class CartItemService extends BaseService
     {
         $userId = $this->getCurrentUserId();
         $cart = $this->cartRepo->getAllForUser($userId);
-        if ($cart) {
-            $data['cart_id'] = $cart->first()->id;
+
+        $cartItem = $cart->first()->cartItems->where('product_id',$data['product_id'])->first();
+        if(!$cartItem)
+        {
+            if ($cart)
+            {
+                $data['cart_id'] = $cart->first()->id;
+            }
+            return $this->repository->create($data);
+
         }
-       return $this->repository->create($data);
-       
+        else
+        {
+            $cartItem->quantity += $data['quantity'];
+            $cartItem->save();
+        }
+
     }
 
     public function updateForCurrentUser($id, array $data)

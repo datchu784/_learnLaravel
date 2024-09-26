@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\CartItemEditRequest;
 use App\Http\Requests\CartItemRequest;
 use App\Services\CartItemService;
 
@@ -37,7 +38,7 @@ class CartItemController extends BaseApiController
         return $this->storeAuthenticated($request);
     }
 
-    public function update(CartItemRequest $request, int $id)
+    public function update(CartItemEditRequest $request, int $id)
     {
         return $this->updateBase($request, $id);
     }

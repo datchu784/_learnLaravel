@@ -38,7 +38,7 @@ class UserEditRequest extends FormRequest
     public function messages()
     {
         return [
-            'name' => 'Name is required ',
+            'name.required' => 'Name is required ',
             'email.required' => 'Email is required ',
 
 

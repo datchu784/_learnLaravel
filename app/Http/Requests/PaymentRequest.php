@@ -37,11 +37,11 @@ class PaymentRequest extends FormRequest
     {
         return [
 
-            'recipient_id' => 'recipient_id is required',
+            'recipient_id.required' => 'recipient_id is required',
             //'sender_id' => 'sender_id is required',
-            'amount' => 'amount is required',
-            'payment_method' => 'payment_method is required',
-            'status' => 'status is required',
+            'amount.required' => 'amount is required',
+            'payment_method.required' => 'payment_method is required',
+            'status.required' => 'status is required',
 
 
         ];

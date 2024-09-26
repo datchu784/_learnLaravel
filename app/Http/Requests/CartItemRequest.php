@@ -28,13 +28,14 @@ class CartItemRequest extends FormRequest
             'product_id' => 'required|integer|max:10000',
             'quantity' => 'required|integer|max:10000',
 
+
         ];
     }
     public function messages()
     {
         return [
-            'product_id' => 'Quantity is required',
-            'quantity' => 'Quantity is required',
+            'product_id.required' => 'product_id is required',
+            'quantity.required' => 'Quantity is required',
 
 
         ];

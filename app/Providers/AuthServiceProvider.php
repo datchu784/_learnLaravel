@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Models\Permission;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 use Illuminate\Support\Facades\Gate;
 use App\Models\Role;
@@ -30,6 +31,10 @@ class AuthServiceProvider extends ServiceProvider
         {
             return $user->id_role==1;
 
+        });
+        Gate::define('manage-users', function(User $user)
+        {
+            return $user->userPermissions()->where('permission_id',1)->exists();
         });
 
         //

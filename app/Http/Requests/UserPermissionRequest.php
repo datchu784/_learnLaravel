@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class UserRequest extends FormRequest
+class UserPermissionRequest extends FormRequest
 {
 
     /**
@@ -25,19 +25,16 @@ class UserRequest extends FormRequest
     public function rules()
     {
         return [
+            'user_id' => 'required|integer|max:10000',
+            'permission_id' => 'required|integer|max:10000',
 
-            'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users',
-            'password' => 'required|string|min:6',
         ];
     }
     public function messages()
     {
         return [
-            'name.required' => 'Name is required ',
-            'email.required' => 'Email is required ',
-            'password.required' => 'Password is required',
-
+            'user_id.required' => 'user_id is required ',
+            'permission_id.required' => 'permission_id is required ',
 
         ];
     }

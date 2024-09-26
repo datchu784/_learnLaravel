@@ -9,8 +9,11 @@ use App\Http\Controllers\CartController;
 use App\Http\Controllers\CartItemController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\PaymentController;
+use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\UserPermissionController;
+use App\Models\Permission;
 
 Route::group([
     'middleware' => 'api',
@@ -23,6 +26,8 @@ Route::group([
 Route::group([
     'middleware' => ['auth:api']
 ], function ($router) {
+    Route::get('carts', [CartController::class, 'get']);
+    Route::apiResource('cart-items', CartItemController::class);
     Route::get('users/self', [UserController::class, 'getSelf']);
     Route::get('orders/index',[OrderController::class, 'indexAuthenticated']);
     Route::get('orders/show/{id}', [OrderController::class, 'showAuthenticated']);
@@ -37,6 +42,8 @@ Route::group([
     Route::put('users/is-admin/{id}', [UserController::class, 'isAdmin']);
     Route::apiResource('users', UserController::class);
     Route::apiResource('roles', RoleController::class);
+    Route::apiResource('permissions', PermissionController::class);
+    Route::apiResource('user-permissions', UserPermissionController::class);
     Route::put('products/quantity', [ProductController::class, 'updateQuantityProduct']);
     Route::apiResource('products', ProductController::class)->except(['index', 'show']);
     Route::apiResource('product-types', ProductTypeController::class)->except(['index', 'show']);
@@ -51,7 +58,7 @@ Route::get('products/{id}', [ProductController::class, 'show']);
 Route::get('product-types', [ProductTypeController::class, 'index']);
 Route::get('product-types/{id}', [ProductTypeController::class, 'show']);
 
-Route::get('carts', [CartController::class, 'get'])->middleware('auth:api');
-Route::apiResource('cart-items', CartItemController::class)->middleware('auth:api');
+
+
 
 

@@ -34,8 +34,7 @@ class RolePostRequest extends FormRequest
     {
         return [
             'name.required' => 'Name is required ',
-            'description.required' => 'Description is required ',
-            
+
         ];
     }
 }

@@ -34,8 +34,7 @@ class RolePutRequest extends FormRequest
     {
         return [
             'name.required' => 'Name is required ',
-            'description.required' => 'Description is required ',
-            'user_id' => 'user_id is required '
+            'user_id.required' => 'user_id is required '
         ];
     }
 }

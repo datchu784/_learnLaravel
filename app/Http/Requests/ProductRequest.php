@@ -36,8 +36,8 @@ class ProductRequest extends FormRequest
         return [
             'name.required' => 'Name is required ',
             'description.required' => 'Description is required ',
-            'quantity' => 'Quantity is required',
-            'product_type_id' => 'product_type_id is required'
+            'quantity.required' => 'Quantity is required',
+            'product_type_id.required' => 'product_type_id is required'
 
         ];
     }

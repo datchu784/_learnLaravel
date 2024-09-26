@@ -33,7 +33,8 @@ class CartItemController extends BaseApiController
 
     public function store(CartItemRequest $request)
     {
-        return $this->storeBase($request);
+        //$request->merge(['cart_id' => 1]); thêm dữ liệu cho $request
+        return $this->storeAuthenticated($request);
     }
 
     public function update(CartItemRequest $request, int $id)

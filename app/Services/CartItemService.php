@@ -45,7 +45,8 @@ class CartItemService extends BaseService
         if ($cart) {
             $data['cart_id'] = $cart->first()->id;
         }
-        return $this->repository->create($data);
+       return $this->repository->create($data);
+       
     }
 
     public function updateForCurrentUser($id, array $data)

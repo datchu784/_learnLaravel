@@ -34,7 +34,7 @@ class AuthServiceProvider extends ServiceProvider
         });
         Gate::define('manage-users', function(User $user)
         {
-            return $user->userPermissions()->where('permission_id',1)->exists();
+            return $user->userPermissions->where('permission_id', 1)->count() > 0;
         });
 
         //

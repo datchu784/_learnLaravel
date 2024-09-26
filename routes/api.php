@@ -40,7 +40,7 @@ Route::group([
     'middleware' => ['auth:api', 'check.role:manage-roles']
 ], function ($router) {
     Route::put('users/is-admin/{id}', [UserController::class, 'isAdmin']);
-    Route::apiResource('users', UserController::class);
+    Route::apiResource('users', UserController::class)->middleware('check.permission:manage-users');
     Route::apiResource('roles', RoleController::class);
     Route::apiResource('permissions', PermissionController::class);
     Route::apiResource('user-permissions', UserPermissionController::class);

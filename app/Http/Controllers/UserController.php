@@ -31,8 +31,8 @@ class UserController extends BaseApiController
     public function getSelf()
     {
         $user = auth()->user();
-        //return $user;
-        return $user->userPermissions->where('permission_id',1)->exists();
+        return $user;
+
     }
 
     public function updateBySelf(UserEditRequest $request)

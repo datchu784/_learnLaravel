@@ -17,10 +17,10 @@ class CheckPermission
      */
     public function handle(Request $request, Closure $next, $permission)
     {
-        if(Gate::denies($permission)
+        if(Gate::denies($permission))
         {
-            abort(403,"Unauthorized")
-        });
+            abort(403,"Unauthorized");
+        };
 
         return $next($request);
     }

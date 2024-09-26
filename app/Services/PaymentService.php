@@ -55,6 +55,7 @@ class PaymentService extends BaseService
                     $product->quantity -= $orderDetail['quantity'];
                     $order->total_amount += $orderDetail['price'];
                     $this->orderDetailRepo->create($orderDetail);
+                    $product->save();
                 }
                 else
                 {

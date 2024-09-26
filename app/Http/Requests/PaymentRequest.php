@@ -25,11 +25,13 @@ class PaymentRequest extends FormRequest
     public function rules()
     {
         return [
-            'recipient_id' => 'required|integer|max:10000',
-            //'sender_id' => 'required|integer|max:10000',
-            'amount' => 'required|numeric|max:10000',
-            'payment_method' => 'required|string|max:255',
-            'status' => 'required|string|max:255',
+            //'payment.amount' => 'required|numeric|min:0',
+            'payment.recipient_id' => 'required|exists:users,id',
+            'payment.payment_method' => 'required|string',
+
+            'order_details' => 'required|array|min:1',
+            'order_details.*.product_id' => 'required|exists:products,id',
+            'order_details.*.quantity' => 'required|integer|min:1',
 
         ];
     }
@@ -37,11 +39,11 @@ class PaymentRequest extends FormRequest
     {
         return [
 
-            'recipient_id.required' => 'recipient_id is required',
-            //'sender_id' => 'sender_id is required',
-            'amount.required' => 'amount is required',
-            'payment_method.required' => 'payment_method is required',
-            'status.required' => 'status is required',
+            // 'payment.recipient_id.required' => 'recipient_id is required',
+            // //'sender_id' => 'sender_id is required',
+            // //'amount.required' => 'amount is required',
+            // 'payment_method.required' => 'payment_method is required',
+            // 'status.required' => 'status is required',
 
 
         ];

@@ -2,49 +2,77 @@
 
 namespace App\Services;
 
+use App\Repositories\Interfaces\IOrderDetailRepository;
 use App\Repositories\Interfaces\IOrderRepository;
 use App\Repositories\Interfaces\IPaymentRepository;
+use App\Repositories\Interfaces\IProductRepository;
 use App\Repositories\Interfaces\IUserRepository;
 use Exception;
 use Illuminate\Support\Facades\DB;
-use PhpParser\Node\Stmt\TryCatch;
+
 
 class PaymentService extends BaseService
 {
     public $orderRepo;
     public $userRepo;
+    public $productRepo;
+    public $orderDetailRepo;
 
-    public function __construct(IPaymentRepository $repository, IOrderRepository $orderRepo, IUserRepository $userRepo)
+    public function __construct(
+        IPaymentRepository $repository,
+        IOrderRepository $orderRepo,
+        IUserRepository $userRepo,
+        IProductRepository $productRepo,
+        IOrderDetailRepository $orderDetailRepo)
     {
         $this->repository = $repository;
         $this->orderRepo = $orderRepo;
         $this->userRepo = $userRepo;
+        $this->productRepo = $productRepo;
+        $this->orderDetailRepo = $orderDetailRepo;
     }
 
-    public function create(array $data)
+    public function createPayment(array $payment, array $orderDetails)
     {
         DB:: beginTransaction();
         try{
             $userId = $this->getCurrentUserId();
-            $data['sender_id'] = $userId;
+            $payment['sender_id'] = $userId;
 
             $orders=[
                 'user_id'=>$userId,
-                'total_amount'=> $data['amount'],
+                'total_amount'=> 0,
                 'status'=> 'yet received goods',
             ];
-            $this->orderRepo->create($orders);
-
+            $order = $this->orderRepo->create($orders);
+            foreach($orderDetails as $orderDetail)
+            {
+                $orderDetail['order_id'] = $order->id;
+                $product = $this->productRepo->getById($orderDetail['product_id']);
+                if($product->quantity >= $orderDetail['quantity'])
+                {
+                    $orderDetail['price'] = $product->price * $orderDetail['quantity'];
+                    $product->quantity -= $orderDetail['quantity'];
+                    $order->total_amount += $orderDetail['price'];
+                    $this->orderDetailRepo->create($orderDetail);
+                }
+                else
+                {
+                    throw new Exception('Số lượng sản phẩm không đủ');
+                }
+           }
+            $payment['amount'] = $order->total_amount;
+            $order->save();
 
             $user = $this->userRepo->getById($userId);
-            $user['money'] -= $data['amount'];
+            $user['money'] -= $payment['amount'];
             $user->save();
 
-            $recipientUser = $this->userRepo->getById($data['recipient_id']);
-            $recipientUser['money'] += $data['amount'];
+            $recipientUser = $this->userRepo->getById($payment['recipient_id']);
+            $recipientUser['money'] += $payment['amount'];
             $recipientUser->save();
 
-            $payment = $this->repository->create($data);
+            $payment = $this->repository->create($payment);
 
             DB:: commit();
             return $payment;

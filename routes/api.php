@@ -13,7 +13,7 @@ use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\UserPermissionController;
-use App\Models\Permission;
+
 
 Route::group([
     'middleware' => 'api',
@@ -34,6 +34,7 @@ Route::group([
     Route::delete('orders/{id}', [OrderController::class, 'destroyAuthenticated']);
     Route::post('payments', [PaymentController::class, 'store']);
     Route:: put('users/self',[UserController:: class, 'updateBySelf']);
+
 });
 
 Route::group([

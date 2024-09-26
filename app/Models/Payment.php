@@ -12,6 +12,10 @@ class Payment extends Model
 
     protected $fillable = ['sender_id', 'recipient_id', 'amount', 'payment_method', 'status'];
 
+    protected $attributes = [
+        'status' => 'chờ xác nhận',
+    ];
+
     public function sender()
     {
         return $this->belongsTo(User::class);

@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('name');
             $table->string('description');
             $table->integer('quantity');
+            $table->decimal('price',10,2);
             // khoá ngoại Id
             $table->foreignId('product_type_id')->references('id')->on('product_types');
             $table->timestamps();

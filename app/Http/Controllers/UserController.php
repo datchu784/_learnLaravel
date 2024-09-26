@@ -36,7 +36,8 @@ class UserController extends BaseApiController
 
     public function updateBySelf(UserEditRequest $request)
     {
-        $userId = $this->service->updateBySelf($request);
+        $data = $request->all();
+        $userId = $this->service->updateBySelf( $data);
         return $userId;
     }
 

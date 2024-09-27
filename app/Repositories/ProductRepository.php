@@ -46,21 +46,22 @@ class ProductRepository extends BaseRepository implements IProductRepository
 
     public function joinImageById($id)
     {
-       $products = $this->model
-        ->where('products.id', $id)
-        ->leftJoin('product_images', function ($join) {
-            $join->on('product_images.product_id', '=', 'products.id');
-        })->select('products.*')
-        ->get();
+        $product = $this->model->where('products.id', $id)
+            ->with(['productImages' => function ($query) {
+                $query->select( 'product_id', 'path');
+            }])
+            ->first();
 
-    // Chuyển đổi dữ liệu thành dạng dễ đọc hơn
-    $formattedProducts = $products->map(function ($product) {
-        return [
-            'product' => $product,
-            'imagePaths' => $product->productImages->pluck('path')->toArray(), // Lấy các path và chuyển thành mảng
-        ];
-    });
+        if ($product) {
+            if ($product->productImages->isEmpty()) {
+                $product->setRelation('productImages', collect([
+                    (object)['path' => '/storage/images/default.png']
+                ]));
+            }
+        }
 
-    return $formattedProducts;
+        return $product;
     }
+
+
 }

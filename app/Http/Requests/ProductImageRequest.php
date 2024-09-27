@@ -25,15 +25,17 @@ class ProductImageRequest extends FormRequest
     public function rules()
     {
         return [
-            'file_name' => 'required|string|max:255',
-            'path' => 'required|string',
+            'product_id'=> 'required|max:10000',
+            'file' => 'required|max:255',
+
         ];
     }
     public function messages()
     {
         return [
-            'file_name.required' => 'file_name is required ',
-            'path.required' => 'Path is required ',
+            'product_id.reqired' => 'Product_id is required',
+            'file.required' => 'File is required ',
+
 
         ];
     }

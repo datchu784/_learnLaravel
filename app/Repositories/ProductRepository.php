@@ -24,4 +24,13 @@ class ProductRepository extends BaseRepository implements IProductRepository
         $product->quantity += $quantity;
         return $product->save() ? $product : false;
     }
+
+    public function joinImage($perPage)
+    {
+        return $this->model
+        ->leftJoin('product_images',function($join){
+            $join->on('product_images.product_id', '=', 'products.id')->where('product_images.main',1);
+        })->select('products.*', 'product_images.path as productImages_path')->paginate($perPage);
+
+    }
 }

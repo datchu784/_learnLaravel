@@ -44,7 +44,7 @@ Route::group([
     Route::put('users/is-admin/{id}', [UserController::class, 'isAdmin']);
     Route::apiResource('users', UserController::class)->middleware('check.permission:manage-users');
     Route::apiResource('roles', RoleController::class);
-    Route::apiResource('permissions', PermissionController::class);
+    Route::apiResource('permissions', PermissionController::class)->middleware('check.permission:manage-users');
     Route::apiResource('user-permissions', UserPermissionController::class);
     Route::put('products/quantity', [ProductController::class, 'updateQuantityProduct']);
     Route::apiResource('products', ProductController::class)->except(['index', 'show']);

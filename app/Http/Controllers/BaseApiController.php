@@ -41,7 +41,7 @@ abstract class BaseApiController extends Controller
     {
 
         $item = $this->service->delete($id);
-        return response()->json(['message' => 'Item deleted successfully'], 204);
+        return response()->json($item, 204);
     }
 
     public function indexAuthenticated()

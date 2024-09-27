@@ -6,9 +6,8 @@ use App\Http\Requests\ProductImageRequest;
 use App\Services\ProductImageService;
 use Illuminate\Http\JsonResponse;
 
-class ProductImageController extends Controller
+class ProductImageController extends BaseApiController
 {
-    private $service;
     public function __construct(ProductImageService $service)
     {
         $this->service = $service;

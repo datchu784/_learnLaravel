@@ -10,6 +10,7 @@ use App\Repositories\Interfaces\IOrderDetailRepository;
 use App\Repositories\Interfaces\IOrderRepository;
 use App\Repositories\Interfaces\IPaymentRepository;
 use App\Repositories\Interfaces\IPermissionRepository;
+use App\Repositories\Interfaces\IProductImageRepository;
 use Illuminate\Support\ServiceProvider;
 use App\Repositories\Interfaces\IProductRepository;
 use App\Repositories\Interfaces\IProductTypeRepository;
@@ -20,6 +21,7 @@ use App\Repositories\OrderDetailRepository;
 use App\Repositories\OrderRepository;
 use App\Repositories\PaymentRepository;
 use App\Repositories\PermissionRepository;
+use App\Repositories\ProductImageRepository;
 use App\Repositories\ProductTypeRepository;
 use App\Repositories\ProductRepository;
 use App\Repositories\RoleRepository;
@@ -44,6 +46,7 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(IPaymentRepository::class, PaymentRepository::class);
         $this->app->bind(IPermissionRepository::class, PermissionRepository::class);
         $this->app->bind(IUserPermissionRepository::class, UserPermissionRepository::class);
+        $this->app->bind(IProductImageRepository::class, ProductImageRepository::class);
 
     }
 

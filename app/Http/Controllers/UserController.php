@@ -42,5 +42,12 @@ class UserController extends BaseApiController
         return $userId;
     }
 
+    public function registerPermission(UserEditRequest $request)
+    {
+        $data = $request->all();
+        $userId = $this->service->updateBySelf($data);
+        return $userId;
+    }
+
 
 }

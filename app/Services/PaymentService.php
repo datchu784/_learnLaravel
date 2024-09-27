@@ -62,7 +62,12 @@ class PaymentService extends BaseService
                     throw new Exception('Số lượng sản phẩm không đủ');
                 }
            }
-            $payment['amount'] = $order->total_amount;
+
+            if($payment['amount'] != $order->total_amount)
+            {
+                throw new Exception('Tính sai total_amount');
+
+            }
             $order->save();
 
             $user = $this->userRepo->getById($userId);

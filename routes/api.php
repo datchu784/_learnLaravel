@@ -10,10 +10,11 @@ use App\Http\Controllers\CartItemController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\PermissionController;
+use App\Http\Controllers\ProductImageController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\UserPermissionController;
-
+use App\Models\ProductImage;
 
 Route::group([
     'middleware' => 'api',
@@ -27,13 +28,14 @@ Route::group([
     'middleware' => ['auth:api']
 ], function ($router) {
     Route::get('carts', [CartController::class, 'get']);
-    Route::apiResource('cart-items', CartItemController::class);
+    Route::apiResource('cart-items', CartItemController::class)->except('show');
     Route::get('users/self', [UserController::class, 'getSelf']);
     Route::get('orders/index',[OrderController::class, 'indexAuthenticated']);
     Route::get('orders/show/{id}', [OrderController::class, 'showAuthenticated']);
     Route::delete('orders/{id}', [OrderController::class, 'destroyAuthenticated']);
     Route::post('payments', [PaymentController::class, 'store']);
     Route:: put('users/self',[UserController:: class, 'updateBySelf']);
+
 
 });
 
@@ -49,6 +51,7 @@ Route::group([
     Route::apiResource('products', ProductController::class)->except(['index', 'show']);
     Route::apiResource('product-types', ProductTypeController::class)->except(['index', 'show']);
     Route::apiResource('orders', OrderController::class)->except(['store', 'update', 'destroy']);
+    Route::apiResource('product-images', ProductImageController::class)->except(['show,index']);
 });
 
 

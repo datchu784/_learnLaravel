@@ -13,11 +13,7 @@ class CartItemController extends BaseApiController
     {
         $this->service = $service;
     }
-    // public function get()
-    // {
-    //     $cart = $this->service->getCartItem();
-    //     return response()->json($cart, 200);
-    // }
+
     public function index()
     {
        $cartItems =  $this->indexAuthenticated();
@@ -25,12 +21,6 @@ class CartItemController extends BaseApiController
         return response()->json($cartItems);
     }
 
-    public function show($id)
-    {
-        $cartItem =  $this->showAuthenticated($id);
-
-        return response()->json($cartItem);
-    }
 
     public function store(CartItemRequest $request)
     {
@@ -42,6 +32,14 @@ class CartItemController extends BaseApiController
     {
         return $this->updateBase($request, $id);
     }
+
+    public function destroy($id)
+    {
+
+        $item = $this->service->destroyAuthenticated($id);
+        return response()->json(['message' => 'Item deleted successfully'], 204);
+    }
+
 
 
 }

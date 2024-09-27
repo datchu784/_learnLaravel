@@ -18,4 +18,5 @@ class CartItemRepository extends BaseRepository implements ICartItemRepository
          $user = $this->model->where('cart_id',$cardId)->get();
         return $user;
     }
+   
 }

@@ -23,7 +23,7 @@ class CartItemRepository extends BaseRepository implements ICartItemRepository
     {
        return  $this->model->where('cart_id', $cart->first()->id)
         ->join('products','products.id','=','cart_items.product_id')
-        ->select('cart_items.*','products.name as products_name ')->latest()->get();
+        ->select('cart_items.*','products.name as products_name')->latest()->get();
     }
 
 }

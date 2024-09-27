@@ -36,7 +36,6 @@ Route::group([
     Route::post('payments', [PaymentController::class, 'store']);
     Route:: put('users/self',[UserController:: class, 'updateBySelf']);
 
-
 });
 
 Route::group([
@@ -61,6 +60,8 @@ Route::get('products/{id}', [ProductController::class, 'show']);
 
 Route::get('product-types', [ProductTypeController::class, 'index']);
 Route::get('product-types/{id}', [ProductTypeController::class, 'show']);
+
+Route::get('product-images', [ProductImage::class, 'index']);
 
 
 

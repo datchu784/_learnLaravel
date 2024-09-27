@@ -14,13 +14,6 @@ class CartItemService extends BaseService
         $this->cartRepo = $cartRepo;
     }
 
-    // public function getCartItem()
-    // {
-    //     $userId = $this->getCurrentUserId();
-    //     $cart = $this->cartRepo->getCart($userId);
-    //     return $this->repository->getCartItem($cart->id);
-    // }
-
     public function getAllForCurrentUser()
     {
         $userId = $this->getCurrentUserId();

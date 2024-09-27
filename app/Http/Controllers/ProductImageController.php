@@ -6,15 +6,17 @@ use App\Http\Requests\ProductImageRequest;
 use App\Services\ProductImageService;
 use Illuminate\Http\JsonResponse;
 
-class ProductImageController extends BaseApiController
+class ProductImageController extends Controller
 {
+    private $service;
     public function __construct(ProductImageService $service)
     {
         $this->service = $service;
     }
     public function store(ProductImageRequest $request): JsonResponse
     {
-        return $this->storeBase($request);
+        $item= $this->service->uploadImage($request);
+        return response()->json($item, 201);
     }
 
     public function update(ProductImageRequest $request, int $id): JsonResponse

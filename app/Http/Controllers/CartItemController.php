@@ -35,8 +35,7 @@ class CartItemController extends BaseApiController
 
     public function destroy($id)
     {
-
-        $item = $this->service->destroyAuthenticated($id);
+        $this->destroyAuthenticated($id);
         return response()->json(['message' => 'Item deleted successfully'], 204);
     }
 

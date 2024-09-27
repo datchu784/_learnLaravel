@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\ProductImageEditRequest;
 use App\Http\Requests\ProductImageRequest;
 use App\Services\ProductImageService;
 use Illuminate\Http\JsonResponse;
@@ -12,14 +13,16 @@ class ProductImageController extends BaseApiController
     {
         $this->service = $service;
     }
+    
     public function store(ProductImageRequest $request): JsonResponse
     {
-        $item= $this->service->uploadImage($request);
+        $item= $this->service->createImage($request);
         return response()->json($item, 201);
     }
 
-    public function update(ProductImageRequest $request, int $id): JsonResponse
+    public function updateImage(ProductImageEditRequest $request,int $id): JsonResponse
     {
-        return $this->updateBase($request, $id);
+        $item = $this->service->updateImage($id,$request);
+        return response()->json($item, 201);
     }
 }

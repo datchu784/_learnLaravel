@@ -2,8 +2,6 @@
 
 namespace App\Services;
 
-use App\Http\Requests\ProductImageRequest;
-use App\Models\Product;
 use App\Repositories\Interfaces\IProductImageRepository;
 use Illuminate\Support\Str;
 
@@ -17,6 +15,49 @@ class ProductImageService extends BaseService
         $this->repository = $repository;
     }
 
+    public function updateImage($id, $request)
+    {
+        $productImage = $this->repository->getByid($id);
+        $path = $productImage->path;
+        $path = ltrim($path, '/storage/');
+
+        $disk = 'public';
+        if (Storage::disk($disk)->exists($path)) {
+            Storage::disk($disk)->delete($path);
+        }
+
+        $productImageUpload = $this->updatePathImage($request);
+
+        $productImage->path= $productImageUpload;
+        $productImage->save();
+    }
+
+    public function updatePathImage($request)
+    {
+        if ($request->hasFile('file')) {
+            $file = $request->file('file');
+            $fileName = $file->getClientOriginalName();
+            $fileExtension = $file->getClientOriginalExtension();
+            $fileSize = $file->getSize();
+
+            $permitted = ['png', 'jpg', 'svg', 'jpeg'];
+
+            if (in_array(strtolower($fileExtension), $permitted)) {
+                if ($fileSize < 100000) {
+                    $fileNameEnd = time() . '_' . Str::random(10) . '_' . $fileName;
+                    $path = $file->storeAs('public/images', $fileNameEnd);
+
+                    $data = Storage::url($path);
+                    return $data;
+                } else {
+                    throw new Exception('File size is too large');
+                }
+            } else {
+                throw new Exception('File exception invalid');
+            }
+        }
+    }
+
     public function delete($id)
     {
         $productImage = $this->repository->getByid($id);
@@ -24,17 +65,29 @@ class ProductImageService extends BaseService
         $path = ltrim($path, '/storage/');
 
         $disk = 'public';
-        if(Storage::disk($disk)->exists($path))
-        {
+        if (Storage::disk($disk)->exists($path)) {
             Storage::disk($disk)->delete($path);
         }
 
         return $this->repository->delete($id);
+    }
+
+    public function createImage($request)
+    {
+        $productImage = $this->uploadImage($request);
+        if($productImage)
+        {
+            return $this->repository->create($productImage);
+        }
+        else
+        {
+            throw new Exception('Error uploading image');
+        }
 
 
     }
 
-    public function uploadImage(ProductImageRequest $request)
+    public function uploadImage($request)
     {
         if($request->hasFile('file'))
         {
@@ -55,8 +108,7 @@ class ProductImageService extends BaseService
                     $data['product_id'] = $request->product_id;
                     $data['file_name'] = $fileNameEnd;
                     $data['path'] = Storage:: url($path);
-                     $this->repository->create($data);
-                    return $path;
+                    return $data;
                 }
                 else
                 {

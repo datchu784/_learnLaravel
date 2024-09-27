@@ -27,8 +27,14 @@ class CartItemService extends BaseService
 
         $cart = $this->cartRepo->getAllForUser($userId);
 
-        $cartItem = $this->repository->model->where('cart_id', $cart->first()->id)->latest()->get();
-        return $cartItem;
+        //$cartItems = $this->repository->model->where('cart_id', $cart->first()->id)->latest()->get();
+        $cartItems = $this->repository->joinProduct($cart);
+
+        // foreach($cartItems as $cartItem)
+        // {
+        //     $cartItem->product;
+        // }
+        return $cartItems;
 
     }
 

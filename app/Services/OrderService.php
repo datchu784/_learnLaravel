@@ -19,5 +19,4 @@ class OrderService extends BaseService
         $orderDetail = $this->repository->joinOrderDetail($id, $userId);
         return $orderDetail;
     }
-
 }

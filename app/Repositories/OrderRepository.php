@@ -24,13 +24,18 @@ class OrderRepository extends BaseRepository implements IOrderRepository
         ->first();
 
         if ($order) {
-           
+
             $order->load('orderDetails.product');
             return $order;
         } else {
             return null;
         }
 
+    }
+
+    public function getAll()
+    {
+        return parent::getAll()->latest() ;
     }
 
 

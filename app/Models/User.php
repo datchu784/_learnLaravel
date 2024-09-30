@@ -15,6 +15,11 @@ class User extends Authenticatable implements JWTSubject
 
     protected $hidden = ['password', 'remember_token'];
 
+    protected $attributes = [
+        'money' => 0,
+        'id_role'=>2
+    ];
+
 
     // 2 method của interface
     public function getJWTIdentifier()

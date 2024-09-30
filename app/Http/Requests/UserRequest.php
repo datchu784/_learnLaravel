@@ -29,6 +29,7 @@ class UserRequest extends FormRequest
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:6',
+            //'id_role' => 'required|integer|max:10000',
         ];
     }
     public function messages()
@@ -37,6 +38,7 @@ class UserRequest extends FormRequest
             'name.required' => 'Name is required ',
             'email.required' => 'Email is required ',
             'password.required' => 'Password is required',
+            //'id_role.required' => 'id_role is required',
 
 
         ];

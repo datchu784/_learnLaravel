@@ -71,6 +71,11 @@ class PaymentService extends BaseService
             $order->save();
 
             $user = $this->userRepo->getById($userId);
+            if($user['money'] < $payment['amount'] )
+            {
+                throw new Exception('Không đủ tiền');
+            }
+
             $user['money'] -= $payment['amount'];
             $user->save();
 

@@ -26,4 +26,6 @@ class UserRepository extends BaseRepository implements IUserRepository
         $user->save();
     }
 
+    
+
 }

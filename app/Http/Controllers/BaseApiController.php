@@ -12,6 +12,7 @@ abstract class BaseApiController extends Controller
     {
         $items = $this->service->paginate();
         return response()->json($items);
+
     }
 
     public function show($id)

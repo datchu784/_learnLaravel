@@ -55,7 +55,7 @@ Route::group([
 });
 
 
-Route::get('products', [ProductController::class, 'index']);
+Route::get('products', [ProductController::class, 'index'])->middleware('ddos','csrf');
 Route::get('products/search', [ProductController::class, 'search']);
 Route::get('products/{id}', [ProductController::class, 'show']);
 

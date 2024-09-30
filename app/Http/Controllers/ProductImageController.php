@@ -26,4 +26,10 @@ class ProductImageController extends BaseApiController
         $item = $this->service->updateImage($id,$request);
         return response()->json($item, 201);
     }
+
+    public function changeMain($id)
+    {
+        $item = $this->service->changeMain($id);
+        return response()->json($item,200);
+    }
 }

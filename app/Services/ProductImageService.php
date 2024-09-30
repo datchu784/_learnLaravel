@@ -123,5 +123,10 @@ class ProductImageService extends BaseService
 
     }
 
+    public function changeMain($id)
+    {
+        return $this->repository->changeMain($id);
+    }
+
 
 }

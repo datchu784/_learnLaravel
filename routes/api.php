@@ -50,6 +50,7 @@ Route::group([
     Route::apiResource('products', ProductController::class)->except(['index', 'show']);
     Route::apiResource('product-types', ProductTypeController::class)->except(['index', 'show']);
     Route::apiResource('orders', OrderController::class)->except(['store', 'update', 'destroy']);
+    Route::put('product-images/main/{id}', [ProductImageController::class, 'changeMain']);
     Route::post('product-images/{id}', [ProductImageController::class,'updateImage']);
     Route::apiResource('product-images', ProductImageController::class)->except(['show','index','update']);
 });

@@ -28,7 +28,7 @@ class UserRepository extends BaseRepository implements IUserRepository
 
     public function paginate($perPage = 15)
     {
-        $users = $this->model->paginate(15);
+        $users = $this->model->paginate($perPage);
         foreach ($users as $user) {
             $user->userPermissions;
         }

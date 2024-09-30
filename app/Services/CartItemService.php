@@ -27,8 +27,6 @@ class CartItemService extends BaseService
         // {
         //     $cartItem->product;
         // }
-
-        // $cartItems['price'] = $cartItem->quan
         return $cartItems;
 
     }

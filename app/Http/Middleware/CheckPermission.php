@@ -15,13 +15,14 @@ class CheckPermission
      * @param  \Closure(\Illuminate\Http\Request): (\Illuminate\Http\Response|\Illuminate\Http\RedirectResponse)  $next
      * @return \Illuminate\Http\Response|\Illuminate\Http\RedirectResponse
      */
-    public function handle(Request $request, Closure $next, $permission)
+    public function handle(Request $request, Closure $next, ...$permissions)
     {
-        if(Gate::denies($permission))
-        {
-            abort(403,"Unauthorized");
-        };
+        foreach ($permissions as $permission) {
+            if (Gate::allows($permission)) {
+                return $next($request);
+            }
+        }
 
-        return $next($request);
+        abort(403, "Unauthorized");
     }
 }

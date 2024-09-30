@@ -38,21 +38,26 @@ Route::group([
 
 });
 
-Route::group([
-    'middleware' => ['auth:api', 'check.role:manage-roles']
-], function ($router) {
-    Route::put('users/is-admin/{id}', [UserController::class, 'isAdmin']);
-    Route::apiResource('users', UserController::class)->middleware('check.permission:manage-users');
-    Route::apiResource('roles', RoleController::class);
-    Route::apiResource('permissions', PermissionController::class)->middleware('check.permission:manage-users');
-    Route::apiResource('user-permissions', UserPermissionController::class);
-    Route::put('products/quantity', [ProductController::class, 'updateQuantityProduct']);
-    Route::apiResource('products', ProductController::class)->except(['index', 'show']);
-    Route::apiResource('product-types', ProductTypeController::class)->except(['index', 'show']);
-    Route::apiResource('orders', OrderController::class)->except(['store', 'update', 'destroy']);
-    Route::put('product-images/main/{id}', [ProductImageController::class, 'changeMain']);
-    Route::post('product-images/{id}', [ProductImageController::class,'updateImage']);
-    Route::apiResource('product-images', ProductImageController::class)->except(['show','index','update']);
+Route::group(['middleware' => ['auth:api']], function ($router) {
+    // Routes chỉ cho manage-system
+    Route::group(['middleware' => ['check.permission:manage-system']], function ($router) {
+        Route::put('users/is-admin/{id}', [UserController::class, 'isAdmin']);
+        Route::apiResource('roles', RoleController::class);
+        Route::apiResource('permissions', PermissionController::class);
+        Route::apiResource('user-permissions', UserPermissionController::class);
+        Route::put('products/quantity', [ProductController::class, 'updateQuantityProduct']);
+        Route::apiResource('products', ProductController::class)->except(['index', 'show']);
+        Route::apiResource('product-types', ProductTypeController::class)->except(['index', 'show']);
+        Route::apiResource('orders', OrderController::class)->except(['store', 'update', 'destroy']);
+        Route::put('product-images/main/{id}', [ProductImageController::class, 'changeMain']);
+        Route::post('product-images/{id}', [ProductImageController::class, 'updateImage']);
+        Route::apiResource('product-images', ProductImageController::class)->except(['show', 'index', 'update']);
+    });
+
+    // Routes cho  manage-system hoặc manage-users
+    Route::group(['middleware' => ['check.permission:manage-system,manage-users']], function ($router) {
+        Route::apiResource('users', UserController::class);
+    });
 });
 
 

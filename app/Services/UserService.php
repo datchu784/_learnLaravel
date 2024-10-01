@@ -70,7 +70,7 @@ class UserService extends BaseService
     {
         DB:: beginTransaction();
         try{
-            //$userPermissionId = null;
+            $userPermissionId = null;
         if(isset($data['permission_id']))
         {
             $userPermissionId = $data['permission_id'];

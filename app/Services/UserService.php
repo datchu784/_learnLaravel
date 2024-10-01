@@ -3,18 +3,26 @@
 namespace App\Services;
 
 use App\Repositories\Interfaces\ICartRepository;
+use App\Repositories\Interfaces\IUserPermissionRepository;
 use App\Repositories\Interfaces\IUserRepository;
+use Exception;
+use Illuminate\Support\Facades\DB;
 use Tymon\JWTAuth\Facades\JWTAuth;
 
 
 
 class UserService extends BaseService
 {
-    public $cartRepo;
-    public function __construct(IUserRepository $repository, ICartRepository $cartRepo)
+    private $cartRepo;
+    private $userPermissionRepo;
+    public function __construct(
+     IUserRepository $repository,
+     ICartRepository $cartRepo,
+     IUserPermissionRepository $userPermissionRepo)
     {
         $this->repository = $repository;
         $this->cartRepo = $cartRepo;
+        $this->userPermissionRepo = $userPermissionRepo;
     }
 
     public function login(string $email, string $password)
@@ -60,12 +68,37 @@ class UserService extends BaseService
 
     public function create(array $data)
     {
+        DB:: beginTransaction();
+        try{
+            //$userPermissionId = null;
+        if(isset($data['permission_id']))
+        {
+            $userPermissionId = $data['permission_id'];
+            unset($data['permission_id']);
+        }
         $user = $this->repository->create($data);
+        if($userPermissionId != null)
+        {
+            $userPermission= [
+                'permission_id'=>$userPermissionId,
+                'user_id'=> $user->id
+            ];
+            $this->userPermissionRepo->create($userPermission);
 
+        }
         $userIdArray = ['user_id' => $user->id];
         $this->cartRepo->create($userIdArray);
+        DB:: commit();
 
         return $user;
+
+        }
+        catch(Exception $e)
+        {
+            DB::rollBack();
+            throw $e;
+        }
+
     }
 
     public function getSelf()

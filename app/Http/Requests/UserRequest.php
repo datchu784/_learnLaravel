@@ -30,6 +30,7 @@ class UserRequest extends FormRequest
             'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:6',
             //'id_role' => 'required|integer|max:10000',
+            
         ];
     }
     public function messages()

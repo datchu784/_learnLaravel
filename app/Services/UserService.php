@@ -67,4 +67,14 @@ class UserService extends BaseService
 
         return $user;
     }
+
+    public function getSelf()
+    {
+        $userPermissions = auth()->user()->userPermissions;
+        foreach ($userPermissions as $userPermission) {
+            $userPermission->permission;
+        }
+        return auth()->user();
+    }
+
 }

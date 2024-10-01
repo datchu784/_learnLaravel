@@ -38,7 +38,7 @@ Route::group([
 
 });
 
-Route::group(['middleware' => ['auth:api']], function ($router) {
+Route::group(['middleware' => 'auth:api', 'check.role:manage-roles'], function ($router) {
     // Routes chỉ cho manage-system
     Route::group(['middleware' => ['check.permission:manage-system']], function ($router) {
         Route::put('users/is-admin/{id}', [UserController::class, 'isAdmin']);

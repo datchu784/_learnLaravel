@@ -30,8 +30,8 @@ class UserService extends BaseService
     }
     public function register(array $data)
     {
-        $data['id_role'] = 2;
-        $data['money']= 1;
+        // $data['id_role'] = 2;
+        // $data['money']= 0;
         $user = $this->create($data);
 
         $token =$this->createToken($user);
@@ -61,6 +61,19 @@ class UserService extends BaseService
         $userId = $this->getCurrentUserId();
         $user = $this->update($userId, $data );
         return $user;
+    }
+
+    public function create(array $data)
+    {
+        $user = $this->create($data);
+
+        $token = $this->createToken($user);
+
+
+        $userIdArray = ['user_id' => $user->id];
+        $this->cartRepo->create($userIdArray);
+
+        return $token;
     }
 
 }

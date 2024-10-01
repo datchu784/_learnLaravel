@@ -33,12 +33,7 @@ class UserService extends BaseService
         // $data['id_role'] = 2;
         // $data['money']= 0;
         $user = $this->create($data);
-
         $token =$this->createToken($user);
-
-
-        $userIdArray = ['user_id' => $user->id];
-        $this->cartRepo->create($userIdArray);
 
         return $token;
     }
@@ -65,15 +60,11 @@ class UserService extends BaseService
 
     public function create(array $data)
     {
-        $user = $this->create($data);
-
-        $token = $this->createToken($user);
-
+        $user = $this->repository->create($data);
 
         $userIdArray = ['user_id' => $user->id];
         $this->cartRepo->create($userIdArray);
 
-        return $token;
+        return $user;
     }
-
 }

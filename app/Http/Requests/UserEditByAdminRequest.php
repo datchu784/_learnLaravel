@@ -3,8 +3,9 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
-class ProductRequest extends FormRequest
+class UserEditByAdminRequest extends FormRequest
 {
 
     /**
@@ -25,21 +26,26 @@ class ProductRequest extends FormRequest
     public function rules()
     {
         return [
+
             'name' => 'required|string|max:255',
-            'description' => 'required|string|max:255|not_in:something,cursing',
-            'quantity' => 'required|integer|max:10000',
-            'product_type_id' => 'required|integer',
-            'price'=> 'required|numeric|'
+            'id_role' => 'required|integer|max:10000',
+            'email' => [
+                'required',
+                'string',
+                'email',
+                'max:255',
+                Rule::unique('users')->ignore($this->route('user'))
+            ],
+
         ];
     }
     public function messages()
     {
         return [
             'name.required' => 'Name is required ',
-            'description.required' => 'Description is required ',
-            'quantity.required' => 'Quantity is required',
-            'product_type_id.required' => 'product_type_id is required',
-            'price.required' => 'price is required'
+            'id_role.required' => 'id_role is required ',
+            'email.required' => 'Email is required ',
+
 
         ];
     }

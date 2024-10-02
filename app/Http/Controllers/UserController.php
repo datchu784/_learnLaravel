@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\UserEditByAdminRequest;
 use App\Http\Requests\UserEditRequest;
 use App\Http\Requests\UserRequest;
 use App\Services\UserService;
@@ -18,7 +19,7 @@ class UserController extends BaseApiController
         return $this->storeBase($request);
     }
 
-    public function update(UserEditRequest $request, int $id): JsonResponse
+    public function update(UserEditByAdminRequest $request, int $id): JsonResponse
     {
         return $this->updateBase($request, $id);
     }
@@ -39,13 +40,6 @@ class UserController extends BaseApiController
     {
         $data = $request->all();
         $userId = $this->service->updateBySelf( $data);
-        return $userId;
-    }
-
-    public function registerPermission(UserEditRequest $request)
-    {
-        $data = $request->all();
-        $userId = $this->service->updateBySelf($data);
         return $userId;
     }
 

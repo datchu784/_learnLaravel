@@ -5,15 +5,14 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Role extends Model
+class Attribute extends Model
 {
     use HasFactory;
-    protected $fillable =['name', 'description'];
 
-    public function users()
+    protected $fillable = ['name'];
+
+    public function productAttributes()
     {
-        return $this->hasMany(User::class);
+        return $this->hasMany(ProductAttribute::class);
     }
-
-
 }

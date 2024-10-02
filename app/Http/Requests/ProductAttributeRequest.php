@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class OrderDetailRequest extends FormRequest
+class ProductAttributeRequest extends FormRequest
 {
 
     /**
@@ -25,15 +25,18 @@ class OrderDetailRequest extends FormRequest
     public function rules()
     {
         return [
-            'product_id' => 'required|integer|max:10000',
-            'quantity' => 'required|integer|max:10000',
+            'product_id' => 'required|integer|max:255',
+            'attribute_id' => 'required|integer|max:255',
+            'value' => 'required|string|max:255',
+
         ];
     }
     public function messages()
     {
         return [
             'product_id.required' => 'product_id is required ',
-            'quantity.required' => 'quantity is required ',
+            'attribute_id.required' => 'attribute_id is required ',
+            'value.required' => 'value is required',
 
 
         ];

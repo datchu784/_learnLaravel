@@ -6,6 +6,9 @@ use App\Services\ProductService;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use App\Http\Requests\ProductRequest;
+
+use App\Models\ProductVariant;
+
 class ProductController extends BaseApiController
 {
     public function __construct(ProductService $service)
@@ -36,6 +39,8 @@ class ProductController extends BaseApiController
         $product = $this->service->updateQuantityProduct($request->id, $request->quantity);
         return response()->json(null, 200);
     }
+
+    
 }
 
 

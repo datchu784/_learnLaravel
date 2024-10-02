@@ -11,11 +11,11 @@ class DDoSProtection
     {
         $key = $this->resolveRequest($request);
 
-        if (RateLimiter::tooManyAttempts($key,60,1)) {
+        if (RateLimiter::tooManyAttempts($key,3)) {
             return response('Too Many Attempts.', 429);
         }
 
-        RateLimiter::hit($key,1);
+        RateLimiter::hit($key,3);
 
         return $next($request);
     }

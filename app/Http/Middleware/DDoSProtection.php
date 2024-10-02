@@ -15,7 +15,7 @@ class DDoSProtection
             return response('Too Many Attempts.', 429);
         }
 
-        RateLimiter::hit($key,3);
+        RateLimiter::hit($key);
 
         return $next($request);
     }
@@ -23,7 +23,7 @@ class DDoSProtection
     protected function resolveRequest($request)
     {
         return sha1(
-            $request->method() .
+            $request->method().
                 '|' . $request->server('SERVER_NAME') .
                 '|' . $request->path() .
                 '|' . $request->ip()

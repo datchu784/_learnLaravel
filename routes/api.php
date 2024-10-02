@@ -18,8 +18,7 @@ use App\Http\Controllers\RoleController;
 use App\Http\Controllers\SizeController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\UserPermissionController;
-use App\Models\ProductImage;
-use App\Models\Size;
+
 
 Route::group([
     'middleware' => 'api',
@@ -80,7 +79,7 @@ Route::get('products/{id}', [ProductController::class, 'show']);
 Route::get('product-types', [ProductTypeController::class, 'index']);
 Route::get('product-types/{id}', [ProductTypeController::class, 'show']);
 
-Route::get('product-images', [ProductImage::class, 'index']);
+Route::get('product-images', [ProductImageController::class, 'index']);
 
 Route::get('sizes', [SizeController::class,'index']);
 Route::get('colors', [ColorController::class,'index']);

@@ -18,7 +18,7 @@ class UserController extends BaseApiController
         return $this->storeBase($request);
     }
 
-    public function update(UserRequest $request, int $id): JsonResponse
+    public function update(UserEditRequest $request, int $id): JsonResponse
     {
         return $this->updateBase($request, $id);
     }

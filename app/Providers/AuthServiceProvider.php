@@ -32,15 +32,17 @@ class AuthServiceProvider extends ServiceProvider
             return $user->id_role==1;
 
         });
-        
+
         Gate::define('manage-users', function(User $user)
         {
-            return $user->userPermissions->where('permission_id', 1)->count() == 1;
+            $userPermission =  $user->userPermissions;
+            return $userPermission->first()->permission->where('title', 'manage-users')->count() == 1;
         });
 
         Gate:: define('manage-system', function(User $user)
         {
-           return $user->userPermissions()->where('permission_id',2)->count() == 1 ;
+            $userPermission =  $user->userPermissions;
+            return $userPermission->first()->permission->where('title', 'manage-system')->count() == 1;
         });
 
 

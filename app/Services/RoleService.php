@@ -6,7 +6,6 @@ use App\Repositories\Interfaces\IRoleRepository;
 
 class RoleService extends BaseService
 {
-    
 
     public function __construct(IRoleRepository $repository)
     {

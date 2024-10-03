@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+
+use App\Http\Requests\AttributeRequest;
 use Illuminate\Http\Request;
 
 
@@ -14,12 +16,12 @@ class AttributeController extends BaseApiController
     {
         $this->service = $service;
     }
-    public function store(Request $request): JsonResponse
+    public function store(AttributeRequest $request): JsonResponse
     {
         return $this->storeBase($request);
     }
 
-    public function update(Request $request, int $id): JsonResponse
+    public function update(AttributeRequest $request, int $id): JsonResponse
     {
         return $this->updateBase($request, $id);
     }

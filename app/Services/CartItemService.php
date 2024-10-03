@@ -23,7 +23,7 @@ class CartItemService extends BaseService
         //$cartItems = $this->repository->model->where('cart_id', $cart->first()->id)->latest()->get();
         $cartItems = $this->repository->joinProduct($cart);
 
-        // foreach($cartItems as $cartItem)
+        // foreach($cartItems as $cartcarItem)
         // {
         //     $cartItem->product;
         // }
@@ -42,7 +42,7 @@ class CartItemService extends BaseService
         $userId = $this->getCurrentUserId();
         $cart = $this->cartRepo->getAllForUser($userId);
 
-        $cartItem = $cart->first()->cartItems->where('product_id',$data['product_id'])->first();
+        $cartItem = $cart->first()->cartItems->where('product_combinations.id',$data['product_combinations.id'])->first();
         if(!$cartItem)
         {
             if ($cart)

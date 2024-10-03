@@ -25,7 +25,7 @@ class CartItemRequest extends FormRequest
     public function rules()
     {
         return [
-            'product_id' => 'required|integer|max:10000',
+            'product_combination_id' => 'required|integer|max:10000',
             'quantity' => 'required|integer|max:10000',
 
 
@@ -34,7 +34,7 @@ class CartItemRequest extends FormRequest
     public function messages()
     {
         return [
-            'product_id.required' => 'product_id is required',
+            'product_combination_id.required' => 'product_combination_id is required',
             'quantity.required' => 'Quantity is required',
 
 

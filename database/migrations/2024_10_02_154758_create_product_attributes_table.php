@@ -15,9 +15,10 @@ class CreateProductAttributesTable extends Migration
     {
         Schema::create('product_attributes', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('product_id')->constrained()->onDelete('cascade');
-            $table->foreignId('attribute_id')->constrained();
-            $table->string('value');
+            $table->foreignId('product_combination_id')->constrained()->onDelete('cascade');
+            $table->foreignId('attribute_value_id')->constrained()->onDelete('cascade');
+            // cặp unique sẽ không có giá trị trùng lặp
+            //$table->unique(['product_combination_id', 'attribute_value_id']);
             $table->timestamps();
         });
     }
@@ -29,6 +30,6 @@ class CreateProductAttributesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('product_attributes');
+        Schema::dropIfExists('combination_attributes');
     }
 }

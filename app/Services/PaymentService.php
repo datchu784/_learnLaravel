@@ -5,7 +5,7 @@ namespace App\Services;
 use App\Repositories\Interfaces\IOrderDetailRepository;
 use App\Repositories\Interfaces\IOrderRepository;
 use App\Repositories\Interfaces\IPaymentRepository;
-use App\Repositories\Interfaces\IProductRepository;
+use App\Repositories\Interfaces\IProductCombinationRepository;
 use App\Repositories\Interfaces\IUserRepository;
 use Exception;
 use Illuminate\Support\Facades\DB;
@@ -22,7 +22,7 @@ class PaymentService extends BaseService
         IPaymentRepository $repository,
         IOrderRepository $orderRepo,
         IUserRepository $userRepo,
-        IProductRepository $productRepo,
+        IProductCombinationRepository $productRepo,
         IOrderDetailRepository $orderDetailRepo)
     {
         $this->repository = $repository;
@@ -48,11 +48,12 @@ class PaymentService extends BaseService
             foreach($orderDetails as $orderDetail)
             {
                 $orderDetail['order_id'] = $order->id;
-                $product = $this->productRepo->getById($orderDetail['product_id']);
-                if($product->quantity >= $orderDetail['quantity'])
+                $payment['order_id'] = $orderDetail['order_id'];
+                $product = $this->productRepo->getById($orderDetail['product_combination_id']);
+                if($product->stock >= $orderDetail['quantity'])
                 {
                     $orderDetail['price'] = $product->price * $orderDetail['quantity'];
-                    $product->quantity -= $orderDetail['quantity'];
+                    $product->stock -= $orderDetail['quantity'];
                     $order->total_amount += $orderDetail['price'];
                     $this->orderDetailRepo->create($orderDetail);
                     $product->save();

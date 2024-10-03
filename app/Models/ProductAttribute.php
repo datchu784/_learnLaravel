@@ -9,16 +9,17 @@ class ProductAttribute extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['product_id', 'attribute_id', 'value'];
+    protected $fillable =['product_combination_id', 'attribute_value_id'];
 
-    public function product()
+    public function attributeValue()
     {
-        return $this->belongsTo(Product::class);
+        return $this->belongsTo(AttributeValue::class);
     }
 
-    public function attribute()
+    public function productCombination()
     {
-        return $this->belongsTo(Attribute::class);
+        return $this->belongsTo(ProductCombination::class);
     }
+
 
 }

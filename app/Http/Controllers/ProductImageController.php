@@ -16,9 +16,9 @@ class ProductImageController extends BaseApiController
 
     public function store(ProductImageRequest $request)
     {
-        // $item= $this->service->createImage($request);
-        // return response()->json($item, 201);
-        return (string) $request->session()->token();
+        $item= $this->service->createImage($request);
+        return response()->json($item, 201);
+        //return (string) $request->session()->token();
     }
 
     public function updateImage(ProductImageEditRequest $request,int $id): JsonResponse

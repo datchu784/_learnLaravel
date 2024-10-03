@@ -13,5 +13,12 @@ class OrderController extends BaseApiController
         $this->service = $service;
     }
 
+    public function show($id)
+    {
+        $item = $this->showAuthenticated($id);
+
+        return response()->json($item);
+    }
+
 
 }

@@ -21,7 +21,7 @@ class ProductImageRepository extends BaseRepository implements IProductImageRepo
 
         try{
             $product_image = $this->getById($id);
-            $original_main = $this->getAll()->where('product_id', $product_image->product_id)
+            $original_main = $this->getAll()->where('product_combination_id', $product_image->product_combination_id)
             ->where('id','!=',$id)->where('main', 1)->first();
             if($original_main !=null)
             {
@@ -30,8 +30,6 @@ class ProductImageRepository extends BaseRepository implements IProductImageRepo
 
                 $original_main->save();
                 $product_image->save();
-
-
             }
             else{
                 $product_image->main = 1;

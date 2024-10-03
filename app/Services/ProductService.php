@@ -27,11 +27,6 @@ class ProductService extends BaseService
         return $this->repository->search($keyword);
     }
 
-    public function paginate($perPage = 4)
-    {
-      $products = $this->repository->joinImage($perPage);
-      return $products;
-    }
 
     public function updateQuantityProduct($id, $quantity)
     {
@@ -53,10 +48,7 @@ class ProductService extends BaseService
         }
     }
 
-    public function getById($id)
-    {
-        return $this->repository->joinImageById($id);
-    }
+
 }
 
 

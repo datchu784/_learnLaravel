@@ -10,7 +10,7 @@ class Payment extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['sender_id', 'recipient_id', 'amount', 'payment_method', 'status'];
+    protected $fillable = ['sender_id', 'recipient_id','order_id', 'amount', 'payment_method', 'status'];
 
     protected $attributes = [
         'status' => 'chờ xác nhận',

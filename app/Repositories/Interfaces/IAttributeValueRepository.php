@@ -2,7 +2,7 @@
 
 namespace App\Repositories\Interfaces;
 
-interface IColorRepository
+interface IAttributeValueRepository
 {
     public function getAll();
     public function getById(int $id);

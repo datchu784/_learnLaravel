@@ -17,28 +17,15 @@ class Product extends Model
         'product_type_id'
     ];
 
-    public function productVariants()
-    {
-        return $this->hasMany(ProductVariant::class);
-    }
-
-    public function productAttributes()
-    {
-        return $this->hasMany(ProductAttribute::class);
-    }
-
     public function productType(): BelongsTo
     {
         return $this->belongsTo(ProductType::class);
     }
 
-    public function cartItem()
+    public function combinations()
     {
-        return $this->hasMany(Product::class);
+        return $this->hasMany(ProductCombination::class);
     }
 
-    public function productImages()
-    {
-        return $this->hasMany(ProductImage::class);
-    }
+
 }

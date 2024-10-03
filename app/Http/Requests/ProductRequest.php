@@ -29,7 +29,7 @@ class ProductRequest extends FormRequest
             'description' => 'required|string|max:255|not_in:something,cursing',
             'quantity' => 'required|integer|max:10000',
             'product_type_id' => 'required|integer',
-            'price'=> 'required|numeric|'
+            'price'=> 'required|numeric'
         ];
     }
     public function messages()

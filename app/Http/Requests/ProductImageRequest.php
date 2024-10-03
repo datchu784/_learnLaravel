@@ -25,7 +25,7 @@ class ProductImageRequest extends FormRequest
     public function rules()
     {
         return [
-            'product_id'=> 'required|max:10000',
+            'product_combination_id'=> 'required|integer|max:10000',
             'file' => 'required|max:255',
 
         ];
@@ -33,7 +33,7 @@ class ProductImageRequest extends FormRequest
     public function messages()
     {
         return [
-            'product_id.reqired' => 'Product_id is required',
+            'product_combination_id.required' => 'product_combination_id is required',
             'file.required' => 'File is required ',
 
 

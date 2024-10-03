@@ -30,7 +30,7 @@ class PaymentRequest extends FormRequest
             'payment.payment_method' => 'required|string',
 
             'order_details' => 'required|array|min:1',
-            'order_details.*.product_id' => 'required|exists:products,id',
+            'order_details.*.product_combination_id' => 'required|exists:products,id',
             'order_details.*.quantity' => 'required|integer|min:1',
 
         ];
@@ -43,7 +43,7 @@ class PaymentRequest extends FormRequest
             'payment.amount.required' => 'payment.amount is required',
             'payment.payment_method.required' => 'payment.payment_method is required',
             'order_details.required' => 'order_details.required is required',
-            'order_details.*.product_id.required' => 'order_details.*.product_id is required',
+            'order_details.*.product_combination_id.required' => 'order_details.*.product_id is required',
             'order_details.*.quantity' => 'order_details.*.quantity is required',
 
 

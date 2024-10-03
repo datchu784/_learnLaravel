@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class ProductAttributeRequest extends FormRequest
+class AttributeRequest extends FormRequest
 {
 
     /**
@@ -26,10 +26,7 @@ class ProductAttributeRequest extends FormRequest
     {
         return [
 
-            'product_combination_id' => 'required|integer|max:10000',
-            'attribute_value_id' => 'required|integer|max:10000',
-
-
+            'name' => 'required|string|max:255',
 
 
         ];
@@ -38,8 +35,8 @@ class ProductAttributeRequest extends FormRequest
     {
         return [
 
-            'product_combination_id.required' => 'product_id is required',
-            'attribute_value_id.required' => 'Price is required',
+            'name.required' => 'Name is required',
+
 
         ];
     }

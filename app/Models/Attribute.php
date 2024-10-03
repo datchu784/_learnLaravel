@@ -11,8 +11,8 @@ class Attribute extends Model
 
     protected $fillable = ['name'];
 
-    public function productAttributes()
+    public function values()
     {
-        return $this->hasMany(ProductAttribute::class);
+        return $this->hasMany(AttributeValue::class);
     }
 }

@@ -1,21 +1,20 @@
 <?php
 
 use App\Http\Controllers\AttributeController;
+use App\Http\Controllers\AttributeValueController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProductTypeController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\CartItemController;
-use App\Http\Controllers\ColorController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\ProductAttributeController;
+use App\Http\Controllers\ProductCombinationController;
 use App\Http\Controllers\ProductImageController;
-use App\Http\Controllers\ProductVariantController;
 use App\Http\Controllers\RoleController;
-use App\Http\Controllers\SizeController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\UserPermissionController;
 
@@ -29,7 +28,7 @@ Route::group([
     Route::post('logout', [AuthController::class, 'logout']);
 });
 
-Route::get('product-variants/filter', [ProductVariantController::class, 'filter']);
+Route::get('product-attributes/filter', [ProductAttributeController::class, 'filter']);
 
 Route::group([
     'middleware' => ['auth:api']
@@ -59,11 +58,11 @@ Route::group(['middleware' => 'auth:api', 'check.role:manage-roles'], function (
         Route::put('product-images/main/{id}', [ProductImageController::class, 'changeMain']);
         Route::post('product-images/{id}', [ProductImageController::class, 'updateImage']);
         Route::apiResource('product-images', ProductImageController::class)->except(['show', 'index', 'update']);
-        Route::apiResource('sizes', SizeController::class)->except('index');
-        Route::apiResource('colors', ColorController::class)->except('index');
+        Route::apiResource('attribute-values', AttributeValueController::class)->except('index');
+        Route::apiResource('product-combinations', ProductCombinationController::class)->except('index');
         Route::apiResource('attributes', AttributeController::class)->except('index');
         Route::apiResource('product-attributes', ProductAttributeController::class)->except('index');
-        Route::apiResource('product-variants', ProductVariantController::class)->except('index');
+
     });
 
     // Routes cho  manage-system hoặc manage-users
@@ -81,8 +80,8 @@ Route::get('product-types/{id}', [ProductTypeController::class, 'show']);
 
 Route::get('product-images', [ProductImageController::class, 'index']);
 
-Route::get('sizes', [SizeController::class,'index']);
-Route::get('colors', [ColorController::class,'index']);
+Route::get('attribute-values', [AttributeValueController::class,'index']);
+Route::get('product-combinations', [ProductCombinationController::class,'index']);
 Route::get('attributes', [AttributeController::class,'index']);
 Route::get('product-attributes', [ProductAttributeController::class,'index']);
 

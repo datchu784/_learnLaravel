@@ -43,7 +43,7 @@ class ProductImageService extends BaseService
             $permitted = ['png', 'jpg', 'svg', 'jpeg'];
 
             if (in_array(strtolower($fileExtension), $permitted)) {
-                if ($fileSize < 100000) {
+                if ($fileSize < 10000000) {
                     $fileNameEnd = time() . '_' . Str::random(10) . '_' . $fileName;
                     $path = $file->storeAs('public/images', $fileNameEnd);
 
@@ -84,7 +84,6 @@ class ProductImageService extends BaseService
             throw new Exception('Error uploading image');
         }
 
-
     }
 
     public function uploadImage($request)
@@ -105,7 +104,7 @@ class ProductImageService extends BaseService
                     $fileNameEnd = time().'_'.Str::random(10). '_'.$fileName;
                     $path = $file->storeAs('public/images',$fileNameEnd);
 
-                    $data['product_id'] = $request->product_id;
+                    $data['product_combination_id'] = (int)$request->product_combination_id;
                     $data['file_name'] = $fileNameEnd;
                     $data['path'] = Storage:: url($path);
                     return $data;

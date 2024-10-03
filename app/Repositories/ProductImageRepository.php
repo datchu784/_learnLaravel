@@ -22,7 +22,7 @@ class ProductImageRepository extends BaseRepository implements IProductImageRepo
         try{
             $product_image = $this->getById($id);
             $original_main = $this->getAll()->where('product_id', $product_image->product_id)
-            ->where('main', 1)->first();
+            ->where('id','!=',$id)->where('main', 1)->first();
             if($original_main !=null)
             {
                 $original_main->main = 0;

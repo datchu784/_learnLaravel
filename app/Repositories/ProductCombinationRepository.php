@@ -49,7 +49,8 @@ class ProductCombinationRepository extends BaseRepository implements IProductCom
         return $joins
             ->groupBy('combination_id')
             ->map(function ($group) {
-                return ["product_combination_id: ".$group->first()->combination_id =>  [
+                return [
+                    'product_combination_id' => $group->first()->combination_id,
                     'product_name' => $group->first()->product_name,
                     'product_description' => $group->first()->product_description,
                     'attributes' => $group->pluck('attribute_value', 'attribute_name')->toArray(),
@@ -57,7 +58,7 @@ class ProductCombinationRepository extends BaseRepository implements IProductCom
                     'stock' => $group->first()->stock,
                     'productImages_path' => $group->first()->productImages_path
 
-                ]];
+                ];
             })
             // nếu dùng all() thì sẽ trả về array, mà chỉ muốn trả về colection nên không dùng all()
             ->values();

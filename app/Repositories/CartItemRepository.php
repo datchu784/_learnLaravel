@@ -50,7 +50,8 @@ class CartItemRepository extends BaseRepository implements ICartItemRepository
         return $joins
             ->groupBy('combination_id')
             ->map(function ($group) {
-                return ["product_combination_id: " . $group->first()->combination_id => [
+                return [
+                'product_combination_id' => $group->first()->combination_id,
                 'product_name' => $group->first()->product_name,
                 'attributes' => $group->pluck('attribute_value', 'attribute_name')->toArray(),
                 'product_price' => $group->first()->product_price,
@@ -58,7 +59,7 @@ class CartItemRepository extends BaseRepository implements ICartItemRepository
                 'total_price' => $group->first()->total_price,
                 'created_at' => $group->first()->created_at,
                 'updated_at' => $group->first()->updated_at,
-                ]];
+                ];
             })
             ->values()
             ->all();

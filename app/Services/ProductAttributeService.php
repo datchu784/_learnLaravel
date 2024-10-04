@@ -4,18 +4,24 @@ namespace App\Services;
 
 use App\Repositories\Interfaces\IAttributeRepository;
 use App\Repositories\Interfaces\IProductAttributeRepository;
+use App\Repositories\Interfaces\IProductTypeRepository;
+use Exception;
 use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Facades\DB;
 
 class ProductAttributeService extends BaseService
 {
     protected $attributeRepo;
+    protected  $productTypeRepository;
 
     public function __construct(
         IProductAttributeRepository $repository,
-        IAttributeRepository $attributeRepo
+        IAttributeRepository $attributeRepo,
+        IProductTypeRepository $productTypeRepository
     ) {
         $this->repository = $repository;
         $this->attributeRepo = $attributeRepo;
+        $this->productTypeRepository = $productTypeRepository;
     }
 
     public function paginate($perPage = 4)
@@ -67,5 +73,25 @@ class ProductAttributeService extends BaseService
         }
 
         return $filteredProducts->values();
+    }
+
+    public function updateQuantityProduct($id, $quantity)
+    {
+        DB::beginTransaction();
+        try {
+            $product = $this->repository->updateQuantity($id, $quantity);
+            $productTypeId = $product->product_type_id;
+            $productType = $this->productTypeRepository->updateQuantity($productTypeId, $quantity);
+
+            DB::commit();
+            $quantityStatistics = " {$product->name}:
+             {$product->quantity} and {$productType->name}:
+             {$productType->quantity}";
+
+            return $quantityStatistics;
+        } catch (Exception $e) {
+            DB::rollBack();
+            throw $e;
+        }
     }
 }

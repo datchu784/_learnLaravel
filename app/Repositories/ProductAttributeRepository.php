@@ -60,8 +60,13 @@ class ProductAttributeRepository extends BaseRepository implements IProductAttri
         })
         // nếu dùng all() thì sẽ trả về array, mà chỉ muốn trả về colection nên không dùng all()
         ->values();
+    }
 
-
+    public function updateQuantity($id, int $quantity)
+    {
+        $product = $this->getById($id);
+        $product->quantity += $quantity;
+        return $product->save() ? $product : false;
     }
 
 }

@@ -22,7 +22,15 @@ class ProductAttributeService extends BaseService
     {
         $collection = $this->repository->joinToFilter();
 
+        return $this->paginateColect($perPage, $collection);
+    }
+
+    public function paginateColect($perPage = 4, $collection)
+    {
+        $collection = $this->repository->joinToFilter();
+
         $page = request()->get('page', 1);
+
         $offset = ($page - 1) * $perPage;
 
         $items = $collection->slice($offset, $perPage)->values();
@@ -36,9 +44,9 @@ class ProductAttributeService extends BaseService
         );
 
         return $paginator;
-    }
 
-    public function filter($data)
+    }
+    public function filter($data = null)
     {
         $filteredProducts  = $this->repository->joinToFilter();
 
@@ -66,7 +74,13 @@ class ProductAttributeService extends BaseService
             $filteredProducts = $filteredProducts->where('stock', '>=', $data['stock']);
         }
 
-        return $filteredProducts->values();
+        $page = request()->get('page', 1);
+        $perPage = 2;
+        $offset = ($page - 1) * $perPage;
+
+        $items = $filteredProducts->slice($offset, $perPage)->values();
+
+        return $this->paginateColect($perPage, $filteredProducts);
     }
 
 
@@ -74,6 +88,7 @@ class ProductAttributeService extends BaseService
     {
         $products  = $this->repository->joinToFilter()->where('product_combination_id', $id);
         return $products;
-
     }
+
+
 }

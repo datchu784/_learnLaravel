@@ -40,7 +40,11 @@ class ProductController extends BaseApiController
         return response()->json(null, 200);
     }
 
-    
+    public function filter(Request $data, $id)
+    {
+        return response()->json($this->service->filter($data, $id));
+
+    }
 }
 
 

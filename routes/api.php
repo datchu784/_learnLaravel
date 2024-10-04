@@ -29,6 +29,7 @@ Route::group([
 });
 
 Route::get('product-attributes/filter', [ProductAttributeController::class, 'filter']);
+Route::get('products/filter/{id}', [ProductController::class, 'filter']);
 
 Route::group([
     'middleware' => ['auth:api']
@@ -85,7 +86,7 @@ Route::get('attribute-values', [AttributeValueController::class,'index']);
 Route::get('product-combinations', [ProductCombinationController::class,'index']);
 Route::get('attributes', [AttributeController::class,'index']);
 Route::get('product-attributes', [ProductAttributeController::class,'index']);
-Route::get('product-attributes/{id}', [ProductAttributeController::class, 'show']);
+//Route::get('product-attributes/{id}', [ProductAttributeController::class, 'show']);
 
 
 

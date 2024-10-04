@@ -39,12 +39,12 @@ class ProductAttributeRepository extends BaseRepository implements IProductAttri
         return $joins
         ->groupBy('combination_id')
         ->map(function ($group) {
-            return [
+            return ["product_combination_id: " . $group->first()->combination_id =>[
                 'product_name' => $group->first()->product_name,
                 'attributes' => $group->pluck('attribute_value', 'attribute_name')->toArray(),
                 'product_price' => $group->first()->product_price,
                 'stock' => $group->first()->stock
-            ];
+            ]];
         })
         // nếu dùng all() thì sẽ trả về array, mà chỉ muốn trả về colection nên không dùng all()
         ->values();

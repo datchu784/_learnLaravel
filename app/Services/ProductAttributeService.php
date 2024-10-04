@@ -66,6 +66,6 @@ class ProductAttributeService extends BaseService
             $filteredProducts = $filteredProducts->where('stock', '>=', $data['stock']);
         }
 
-        return $filteredProducts;
+        return $filteredProducts->values();
     }
 }

@@ -29,4 +29,5 @@ class ProductAttributeController extends BaseApiController
         $data = $request->all();
         return $this->service->filter($data);
     }
+
 }

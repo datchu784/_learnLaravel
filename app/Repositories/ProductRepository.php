@@ -25,7 +25,12 @@ class ProductRepository extends BaseRepository implements IProductRepository
         return $product->save() ? $product : false;
     }
 
-    
+    public function getById($id)
+    {
+        return $this->model->find($id);
+    }
+
+
 
 
 }

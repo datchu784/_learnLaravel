@@ -94,5 +94,12 @@ class ProductCombinationRepository extends BaseRepository implements IProductCom
         }
         return $this->map($products);
     }
+
+    public function updateQuantity($id, int $quantity)
+    {
+        $product = $this->getById($id);
+        $product->stock += $quantity;
+        return $product->save() ? $product : false;
+    }
 }
 

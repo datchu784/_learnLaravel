@@ -2,7 +2,7 @@
 
 namespace App\Services;
 
-
+use App\Repositories\Interfaces\IProductAttributeRepository;
 use App\Repositories\Interfaces\IProductRepository;
 use App\Repositories\Interfaces\IProductTypeRepository;
 
@@ -12,14 +12,17 @@ use Exception;
 
 class ProductService extends BaseService
 {
-    public  $productTypeRepository;
+    protected  $productTypeRepository;
+    protected  $productAttributeRepo;
 
     public function __construct(
         IProductRepository $repository,
-        IProductTypeRepository $productTypeRepository)
+        IProductTypeRepository $productTypeRepository,
+        IProductAttributeRepository $productAttributeRepo)
     {
         $this->repository = $repository;
         $this->productTypeRepository = $productTypeRepository;
+        $this->productAttributeRepo = $productAttributeRepo;
     }
 
     public function searchProducts($keyword)
@@ -47,6 +50,12 @@ class ProductService extends BaseService
             throw $e;
         }
     }
+
+    public function getById($id)
+    {
+         return $this->productAttributeRepo->joinToFilter()->where("product_id", $id);
+    }
+
 
 
 }

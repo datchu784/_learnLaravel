@@ -31,7 +31,8 @@ class ProductAttributeRepository extends BaseRepository implements IProductAttri
                 'product_combinations.price as product_price',
                 'product_combinations.stock as stock',
                 'product_combinations.id as combination_id',
-                'product_images.path as productImages_path'
+                'product_images.path as productImages_path',
+                 'products.id as product_id'
             )
             ->get();
 
@@ -55,18 +56,19 @@ class ProductAttributeRepository extends BaseRepository implements IProductAttri
                 'attributes' => $group->pluck('attribute_value', 'attribute_name')->toArray(),
                 'product_price' => $group->first()->product_price,
                 'stock' => $group->first()->stock,
-                'productImages_path' => $group->first()->productImages_path
+                'productImages_path' => $group->first()->productImages_path,
+                'product_id' => $group->first()->product_id
             ];
         })
         // nếu dùng all() thì sẽ trả về array, mà chỉ muốn trả về colection nên không dùng all()
         ->values();
     }
 
-    public function updateQuantity($id, int $quantity)
+
+
+    public function getById($id)
     {
-        $product = $this->getById($id);
-        $product->quantity += $quantity;
-        return $product->save() ? $product : false;
+        return $this->model->find($id);
     }
 
 }

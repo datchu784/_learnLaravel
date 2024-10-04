@@ -9,4 +9,6 @@ interface IProductAttributeRepository
     public function create(array $dataDetails);
     public function update($id, array $newDetails);
     public function delete(int $id);
+    public function joinToFilter();
+
 }

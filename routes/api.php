@@ -61,7 +61,7 @@ Route::group(['middleware' => 'auth:api', 'check.role:manage-roles'], function (
         Route::apiResource('attribute-values', AttributeValueController::class)->except('index');
         Route::apiResource('product-combinations', ProductCombinationController::class)->except('index');
         Route::apiResource('attributes', AttributeController::class)->except('index');
-        Route::apiResource('product-attributes', ProductAttributeController::class)->except('index,show');
+        Route::apiResource('product-attributes', ProductAttributeController::class)->except(['index','show']);
 
     });
 
@@ -84,7 +84,7 @@ Route::get('attribute-values', [AttributeValueController::class,'index']);
 Route::get('product-combinations', [ProductCombinationController::class,'index']);
 Route::get('attributes', [AttributeController::class,'index']);
 Route::get('product-attributes', [ProductAttributeController::class,'index']);
-Route::get('product-attributes', [ProductAttributeController::class, 'show']);
+Route::get('product-attributes/{id}', [ProductAttributeController::class, 'show']);
 
 
 

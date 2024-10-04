@@ -94,4 +94,11 @@ class ProductAttributeService extends BaseService
             throw $e;
         }
     }
+
+    public function getById($id)
+    {
+        $filteredProducts  = $this->repository->joinToFilter()->where('product_combination_id',$id);
+        return $filteredProducts->values();
+
+    }
 }

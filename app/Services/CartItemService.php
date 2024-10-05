@@ -42,7 +42,8 @@ class CartItemService extends BaseService
         $userId = $this->getCurrentUserId();
         $cart = $this->cartRepo->getAllForUser($userId);
 
-        $cartItem = $cart->first()->cartItems->where('product_combinations.id',$data['product_combinations.id'])->first();
+        $cartItem = $cart->first()->cartItems
+        ->where('product_combination_id',$data['product_combination_id'])->first();
         if(!$cartItem)
         {
             if ($cart)

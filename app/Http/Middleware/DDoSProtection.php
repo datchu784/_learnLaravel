@@ -17,8 +17,6 @@ class DDoSProtection
             return response('Bạn đã bị cấm. Hãy thử lại sau 10s', 403);
         }
 
-
-
         if (RateLimiter::tooManyAttempts($key,60,1)) {
             $this->banFor10Minute($key,1);
             return response('Too Many Attempts.', 429);

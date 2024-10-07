@@ -27,6 +27,9 @@ class CartItemRepository extends BaseRepository implements ICartItemRepository
         ->join('product_attributes', 'product_attributes.product_combination_id', '=', 'product_combinations.id')
         ->join('attribute_values', 'product_attributes.attribute_value_id', '=', 'attribute_values.id')
         ->join('attributes', 'attribute_values.attribute_id', '=', 'attributes.id')
+        ->leftJoin('product_images', function ($join) {
+            $join->on('product_images.product_combination_id', '=', 'product_combinations.id')->where('product_images.main', 1);
+        })
         ->select(
             'products.name as product_name',
             'attributes.name as attribute_name',
@@ -34,6 +37,7 @@ class CartItemRepository extends BaseRepository implements ICartItemRepository
             'product_combinations.id as combination_id',
             'cart_items.quantity as quantity',
             'product_combinations.price as product_price',
+            'product_images.path as product_image',
             DB::raw('(cart_items.quantity * product_combinations.price) as total_price',
         ),
             'cart_items.created_at as created_at',
@@ -57,6 +61,7 @@ class CartItemRepository extends BaseRepository implements ICartItemRepository
                 'product_price' => $group->first()->product_price,
                 'quantity' => $group->first()->quantity,
                 'total_price' => $group->first()->total_price,
+                'product_image' => $group->first()->product_image ?? '/storage/images/default.png',
                 'created_at' => $group->first()->created_at,
                 'updated_at' => $group->first()->updated_at,
                 ];

@@ -34,7 +34,14 @@ class UserService extends BaseService
         }
 
         $token = $this->createToken($user);
-        return $token;
+
+        $refreshToken = $this->createRefreshToken($user);
+
+        return [
+            'access_token' => $token,
+            'refresh_token' => $refreshToken
+        ];
+
     }
     public function register(array $data)
     {
@@ -42,15 +49,60 @@ class UserService extends BaseService
         // $data['money']= 0;
         $user = $this->create($data);
         $token =$this->createToken($user);
+        $refreshToken = $this->createRefreshToken($user);
 
-        return $token;
+        return [
+            'access_token' => $token,
+            'refresh_token' => $refreshToken
+        ];
+
     }
 
     public function createToken($user)
     {
-        $token = JWTAuth::customClaims(['sub=' > $user->id])->fromUser($user);
+        $token = JWTAuth::customClaims([
+            'sub' => $user->id,
+            'type' => 'access'
+        ])->fromUser($user);
 
         return $token;
+    }
+
+    public function createRefreshToken($user)
+    {
+        $refreshToken = JWTAuth::customClaims([
+            'sub' => $user->id,
+            'type' => 'refresh'
+        ])->fromUser($user);
+
+        return $refreshToken;
+    }
+
+    public function refreshToken(string $refreshToken)
+    {
+        try {
+            $decodedToken = JWTAuth::setToken($refreshToken)->getPayload();
+
+            if ($decodedToken['type'] !== 'refresh') {
+                throw new Exception('Invalid token type');
+            }
+
+            $user = $this->repository->getById($decodedToken['sub']);
+
+            if (!$user) {
+                throw new Exception('User not found');
+            }
+
+            $newAccessToken = $this->createToken($user);
+            $newRefreshToken = $this->createRefreshToken($user);
+
+            return [
+                'access_token' => $newAccessToken,
+                'refresh_token' => $newRefreshToken,
+            ];
+        } catch (Exception $e) {
+            throw $e;
+        }
     }
 
     public function isAdmin($id)

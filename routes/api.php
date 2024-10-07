@@ -32,7 +32,7 @@ Route::get('product-attributes/filter', [ProductAttributeController::class, 'fil
 Route::get('products/filter/{id}', [ProductController::class, 'filter']);
 
 Route::group([
-    'middleware' => ['auth:api']
+    'middleware' => ['refresh','auth:api']
 ], function ($router) {
     Route::get('carts', [CartController::class, 'get']);
     Route::apiResource('cart-items', CartItemController::class)->except('show');
@@ -45,7 +45,7 @@ Route::group([
 
 });
 
-Route::group(['middleware' => 'auth:api', 'check.role:manage-roles'], function ($router) {
+Route::group(['middleware'=> 'refresh', 'auth:api','check.role:manage-roles'], function ($router) {
     // Routes chỉ cho manage-system
     Route::group(['middleware' => ['check.permission:manage-system']], function ($router) {
         Route::put('users/is-admin/{id}', [UserController::class, 'isAdmin']);

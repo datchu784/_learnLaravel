@@ -31,16 +31,16 @@ class ProductAttributeRepository extends BaseRepository implements IProductAttri
                 'product_combinations.price as product_price',
                 'product_combinations.stock as stock',
                 'product_combinations.id as combination_id',
-                'product_images.path as productImages_path',
+                'product_images.path as product_image',
                  'products.id as product_id'
             )
             ->get();
 
-        foreach ($products as $product) {
-            if (!$product->productImages_path) {
-                $product->productImages_path = '/storage/images/default.png';
-            }
-        }
+        // foreach ($products as $product) {
+        //     if (!$product->productImages_path) {
+        //         $product->productImages_path = '/storage/images/default.png';
+        //     }
+        // }
 
         return $this->map($products);
     }
@@ -56,7 +56,7 @@ class ProductAttributeRepository extends BaseRepository implements IProductAttri
                 'attributes' => $group->pluck('attribute_value', 'attribute_name')->toArray(),
                 'product_price' => $group->first()->product_price,
                 'stock' => $group->first()->stock,
-                'productImages_path' => $group->first()->productImages_path,
+                'product_image' => $group->first()->product_image ?? '/storage/images/default.png',
                 'product_id' => $group->first()->product_id
             ];
         })

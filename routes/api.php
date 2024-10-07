@@ -55,7 +55,8 @@ Route::group(['middleware' => 'auth:api', 'check.role:manage-roles'], function (
         Route::put('products/quantity', [ProductController::class, 'updateQuantityProduct']);
         Route::apiResource('products', ProductController::class)->except(['index', 'show']);
         Route::apiResource('product-types', ProductTypeController::class)->except(['index', 'show']);
-        Route::apiResource('orders', OrderController::class)->except(['store', 'update', 'destroy']);
+        Route::apiResource('orders', OrderController::class)->except(['store', 'update', 'destroy'])
+        ->middleware('ddos','csrf');
         Route::put('product-images/main/{id}', [ProductImageController::class, 'changeMain']);
         Route::post('product-images/{id}', [ProductImageController::class, 'updateImage']);
         Route::apiResource('product-images', ProductImageController::class)->except(['show', 'index', 'update']);
@@ -73,7 +74,7 @@ Route::group(['middleware' => 'auth:api', 'check.role:manage-roles'], function (
     });
 });
 
-Route::get('products', [ProductController::class, 'index'])->middleware('ddos','csrf');
+Route::get('products', [ProductController::class, 'index'])->middleware('ddos');
 Route::get('products/search', [ProductController::class, 'search']);
 Route::get('products/{id}', [ProductController::class, 'show']);
 

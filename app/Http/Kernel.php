@@ -38,11 +38,13 @@ class Kernel extends HttpKernel
             \Illuminate\View\Middleware\ShareErrorsFromSession::class,
             \App\Http\Middleware\VerifyCsrfToken::class,
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
+            
         ],
 
         'api' => [
             'throttle:api',
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
+            \App\Http\Middleware\UserAccessInfo::class
 
         ],
     ];
@@ -66,7 +68,9 @@ class Kernel extends HttpKernel
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
         'check.role'=> \App\Http\Middleware\CheckRole::class,
         'check.permission' => \App\Http\Middleware\CheckPermission::class,
+        //2 thằng dưới có lẽ nên đưa vô api nhưng hiện tại thì không cần để request nhanh hơn
         'csrf'=>\App\Http\Middleware\CsrfProtection::class,
         'ddos'=>\App\Http\Middleware\DDoSProtection::class,
+        
     ];
 }

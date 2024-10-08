@@ -9,7 +9,6 @@ use Tymon\JWTAuth\Http\Middleware\BaseMiddleware;
 use Tymon\JWTAuth\Exceptions\TokenExpiredException;
 use Tymon\JWTAuth\Exceptions\TokenInvalidException;
 use Tymon\JWTAuth\Exceptions\TokenBlacklistedException;
-use Illuminate\Support\Facades\Cache;
 
 class RefreshTokenMiddleware extends BaseMiddleware
 {
@@ -37,6 +36,7 @@ class RefreshTokenMiddleware extends BaseMiddleware
                 }
 
                 return $response;
+
             } catch (TokenExpiredException $e) {
                 return $this->handleExpiredToken($request, $next, $token);
             } catch (TokenBlacklistedException $e) {
@@ -44,6 +44,7 @@ class RefreshTokenMiddleware extends BaseMiddleware
             } catch (TokenInvalidException $e) {
                 return $this->handleInvalidToken($request, $next, $token);
             }
+
         } catch (Exception $e) {
             return response()->json([
                 'error' => 'Unauthorized',
@@ -84,6 +85,7 @@ class RefreshTokenMiddleware extends BaseMiddleware
             }
 
             throw new Exception('Token has exceeded grace period');
+
         } catch (Exception $e) {
             return response()->json([
                 'error' => 'Invalid blacklisted token',
@@ -115,6 +117,7 @@ class RefreshTokenMiddleware extends BaseMiddleware
             $response = $next($request);
 
             return $this->setTokenResponse($response, $newToken);
+
         } catch (Exception $e) {
             return response()->json([
                 'error' => 'Could not refresh token',

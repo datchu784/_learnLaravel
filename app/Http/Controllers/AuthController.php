@@ -71,7 +71,6 @@ class AuthController extends Controller
             $tokenUserId = $oldPayload->get('sub');
 
             if ($tokenUserId != $userId) {
-                Cache::forget('refresh_token:' . $refreshToken);
                 return response()->json(['error' => 'Invalid token ownership'], 401);
             }
 
@@ -88,7 +87,7 @@ class AuthController extends Controller
     protected function respondWithToken($token)
     {
         $expiration = JWTAuth::factory()->getTTL() * 60;
-        $refreshExpiration = $expiration + (7 * 24 * 60 * 60); // 7 ngày sau khi access token hết hạn
+        $refreshExpiration = $expiration + (60 * 24 * 60 * 60); // 60 ngày sau khi access token hết hạn
 
         $payload = JWTAuth::setToken($token)->getPayload();
         $userId = $payload->get('sub');

@@ -26,13 +26,14 @@ Route::group([
     Route::post('login', [AuthController::class, 'login']);
     Route::post('register', [AuthController::class, 'register']);
     Route::post('logout', [AuthController::class, 'logout']);
+    Route::post('refresh', [AuthController::class, 'refresh']);
 });
 
 Route::get('product-attributes/filter', [ProductAttributeController::class, 'filter']);
 Route::get('products/filter/{id}', [ProductController::class, 'filter']);
 
 Route::group([
-    'middleware' => ['refresh','auth:api']
+    'middleware' => ['refresh']
 ], function ($router) {
     Route::get('carts', [CartController::class, 'get']);
     Route::apiResource('cart-items', CartItemController::class)->except('show');
@@ -45,7 +46,7 @@ Route::group([
 
 });
 
-Route::group(['middleware'=> 'refresh', 'auth:api','check.role:manage-roles'], function ($router) {
+Route::group(['middleware'=>'refresh','auth:api','check.role:manage-roles'], function ($router) {
     // Routes chỉ cho manage-system
     Route::group(['middleware' => ['check.permission:manage-system']], function ($router) {
         Route::put('users/is-admin/{id}', [UserController::class, 'isAdmin']);

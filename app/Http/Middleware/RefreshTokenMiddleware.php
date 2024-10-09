@@ -10,16 +10,20 @@ use Tymon\JWTAuth\Exceptions\TokenInvalidException;
 use Tymon\JWTAuth\Exceptions\TokenBlacklistedException;
 use Tymon\JWTAuth\Http\Middleware\BaseMiddleware;
 use Illuminate\Support\Facades\Cache;
+use Carbon\Carbon;
+use Illuminate\Support\Facades\Auth;
 
 class RefreshTokenMiddleware extends BaseMiddleware
 {
     const REFRESH_TTL = 30; // 30 seconds before expiration
     const BLACKLIST_GRACE_PERIOD = 60 * 24 * 30; // 30 days in minutes
-    const CACHE_TTL = 30; // 5 minutes
+    const CACHE_TTL = 30; // 30 seconds
+
 
     public function handle($request, Closure $next)
     {
         try {
+
             if (!$token = $this->getTokenFromRequest($request)) {
                 return response()->json(['error' => 'Token not provided'], 401);
             }
@@ -29,15 +33,16 @@ class RefreshTokenMiddleware extends BaseMiddleware
                 $payload = JWTAuth::setToken($token)->getPayload();
                 $user = JWTAuth::parseToken()->authenticate();
 
+                // Kiểm tra và tự động làm mới token nếu cần
+                $token = $this->checkAndRefreshToken($user->id, $token);
+
+                // Cập nhật token trong request
+                $request->headers->set('Authorization', 'Bearer ' . $token);
+
                 // Thực hiện request
                 $response = $next($request);
 
-                // Kiểm tra nếu token sắp hết hạn
-                if ($this->shouldRefreshToken($payload)) {
-                    return $this->handleTokenRefresh($response, $token, $user);
-                }
-
-                return $response;
+                return $this->setTokenResponse($response, $token);
             } catch (TokenExpiredException $e) {
                 return $this->handleExpiredToken($request, $next, $token);
             } catch (TokenBlacklistedException $e) {
@@ -51,36 +56,48 @@ class RefreshTokenMiddleware extends BaseMiddleware
                 'message' => $e->getMessage()
             ], 401);
         }
+
+
+    }
+
+    protected function checkAndRefreshToken($userId, $currentToken)
+    {
+        $cacheKey = 'user_token_' . $userId;
+
+        if (Cache::has($cacheKey)) {
+            return Cache::get($cacheKey);
+        }
+
+        $payload = JWTAuth::setToken($currentToken)->getPayload();
+        $expirationTime = Carbon::createFromTimestamp($payload->get('exp'));
+        $now = Carbon::now();
+
+        if ($expirationTime->diffInSeconds($now) <= static::REFRESH_TTL) {
+            $newToken = JWTAuth::refresh($currentToken);
+            Cache::put($cacheKey, $newToken, static::CACHE_TTL);
+            return $newToken;
+        }
+
+        return $currentToken;
     }
 
     protected function handleBlacklistedToken($request, Closure $next, $token)
     {
         try {
-            // Decode token mà không kiểm tra blacklist
             $payload = JWTAuth::getJWTProvider()->decode($token);
-
-            // Kiểm tra xem token có thực sự của user không
             $user = \App\Models\User::find($payload['sub']);
 
             if (!$user) {
                 throw new Exception('User not found');
             }
 
-            // Kiểm tra thời gian tạo token
-            $tokenCreatedAt = $payload['iat'];
-            $now = time();
+            $tokenCreatedAt = Carbon::createFromTimestamp($payload['iat']);
+            $now = Carbon::now();
 
-            // Nếu token được tạo trong khoảng thời gian cho phép
-            if ($now - $tokenCreatedAt <= self::BLACKLIST_GRACE_PERIOD * 60) {
-                // Tạo token mới hoặc lấy từ cache
-                $newToken = $this->getOrCreateNewToken($user->id);
-
-                // Cập nhật token trong request
+            if ($now->diffInMinutes($tokenCreatedAt) <= self::BLACKLIST_GRACE_PERIOD) {
+                $newToken = $this->checkAndRefreshToken($user->id, $token);
                 $request->headers->set('Authorization', 'Bearer ' . $newToken);
-
-                // Thực hiện lại request với token mới
                 $response = $next($request);
-
                 return $this->setTokenResponse($response, $newToken);
             }
 
@@ -96,25 +113,18 @@ class RefreshTokenMiddleware extends BaseMiddleware
     protected function handleExpiredToken($request, Closure $next, $token)
     {
         try {
-            // Decode token mà không kiểm tra hết hạn
             $payload = JWTAuth::getJWTProvider()->decode($token);
-
-            // Lấy user từ payload
             $user = \App\Models\User::find($payload['sub']);
 
             if (!$user) {
                 throw new Exception('User not found');
             }
 
-            // Tạo token mới hoặc lấy từ cache
-            $newToken = $this->getOrCreateNewToken($user->id);
+            $newToken = JWTAuth::fromUser($user);
+            Cache::put('user_token_' . $user->id, $newToken, static::CACHE_TTL);
 
-            // Cập nhật token trong request
             $request->headers->set('Authorization', 'Bearer ' . $newToken);
-
-            // Thực hiện lại request với token mới
             $response = $next($request);
-
             return $this->setTokenResponse($response, $newToken);
         } catch (Exception $e) {
             return response()->json([
@@ -124,35 +134,15 @@ class RefreshTokenMiddleware extends BaseMiddleware
         }
     }
 
-    protected function shouldRefreshToken($payload)
-    {
-        return $payload->get('exp') - time() < static::REFRESH_TTL;
-    }
-
-    protected function handleTokenRefresh($response, $token, $user)
-    {
-        try {
-            // Tạo token mới hoặc lấy từ cache
-            $newToken = $this->getOrCreateNewToken($user->id);
-
-            return $this->setTokenResponse($response, $newToken);
-        } catch (Exception $e) {
-            // Nếu không refresh được, vẫn trả về response gốc
-            return $response;
-        }
-    }
-
     protected function setTokenResponse($response, $token)
     {
         if (method_exists($response, 'getContent')) {
             $content = json_decode($response->getContent(), true) ?: [];
-            $content['token'] = $token;
+            $content['access_token'] = $token;
             $response->setContent(json_encode($content));
         }
 
-        // Thêm token vào header
         $response->headers->set('Authorization', 'Bearer ' . $token);
-
         return $response;
     }
 
@@ -163,36 +153,10 @@ class RefreshTokenMiddleware extends BaseMiddleware
         }
 
         if ($token = $request->header('Authorization')) {
-            $token = str_replace('Bearer ', '', $token);
-            return $token;
+            return str_replace('Bearer ', '', $token);
         }
 
         return null;
-    }
-
-    protected function getOrCreateNewToken($userId)
-    {
-        $cacheKey = 'user_token_' . $userId;
-
-        // Kiểm tra xem token có trong cache không
-        if (Cache::has($cacheKey)) {
-            $cachedToken = Cache::get($cacheKey);
-            $payload = JWTAuth::setToken($cachedToken)->getPayload();
-
-            // Kiểm tra xem token trong cache còn hạn không
-            if ($payload->get('exp') - time() > static::REFRESH_TTL) {
-                return $cachedToken;
-            }
-        }
-
-        // Nếu không có trong cache hoặc đã hết hạn, tạo token mới
-        $user = \App\Models\User::find($userId);
-        $newToken = JWTAuth::fromUser($user);
-
-        // Lưu token mới vào cache
-        Cache::put($cacheKey, $newToken, self::CACHE_TTL);
-
-        return $newToken;
     }
 
     protected function handleInvalidToken($request, Closure $next, $token)

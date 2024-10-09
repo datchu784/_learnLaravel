@@ -105,7 +105,6 @@ class UserService extends BaseService
 
     }
 
-
     public function getSelf()
     {
         $userPermissions = auth()->user()->userPermissions;

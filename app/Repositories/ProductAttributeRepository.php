@@ -14,9 +14,9 @@ class ProductAttributeRepository extends BaseRepository implements IProductAttri
         $this->model = $model;
     }
 
-    public function joinToFilter()
+    public function joinToFilter($sort_by=null, $order = 'asc')
     {
-        $products = $this->model
+        $query = $this->model
             ->join('attribute_values', 'product_attributes.attribute_value_id', '=', 'attribute_values.id')
             ->join('attributes', 'attribute_values.attribute_id', '=', 'attributes.id')
             ->join('product_combinations', 'product_attributes.product_combination_id', '=', 'product_combinations.id')
@@ -33,8 +33,15 @@ class ProductAttributeRepository extends BaseRepository implements IProductAttri
                 'product_combinations.id as combination_id',
                 'product_images.path as product_image',
                  'products.id as product_id'
-            )
-            ->get();
+            );
+
+            if($sort_by)
+            {
+               $query->orderBy($sort_by, $order);
+            }
+        $products = $query->get();
+
+
 
         // foreach ($products as $product) {
         //     if (!$product->productImages_path) {
@@ -51,7 +58,7 @@ class ProductAttributeRepository extends BaseRepository implements IProductAttri
         ->groupBy('combination_id')
         ->map(function ($group) {
             return [
-                'product_combination_id'=> $group->first()->combination_id,
+                'combination_id'=> $group->first()->combination_id,
                 'product_name' => $group->first()->product_name,
                 'attributes' => $group->pluck('attribute_value', 'attribute_name')->toArray(),
                 'product_price' => $group->first()->product_price,

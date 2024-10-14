@@ -31,6 +31,7 @@ class CartItemRepository extends BaseRepository implements ICartItemRepository
             $join->on('product_images.product_combination_id', '=', 'product_combinations.id')->where('product_images.main', 1);
         })
         ->select(
+            'cart_items.id as cart_item_id',
             'products.name as product_name',
             'attributes.name as attribute_name',
             'attribute_values.value as attribute_value',
@@ -55,6 +56,7 @@ class CartItemRepository extends BaseRepository implements ICartItemRepository
             ->groupBy('combination_id')
             ->map(function ($group) {
                 return [
+                'cart_item_id' => $group->first()->cart_item_id,
                 'product_combination_id' => $group->first()->combination_id,
                 'product_name' => $group->first()->product_name,
                 'attributes' => $group->pluck('attribute_value', 'attribute_name')->toArray(),

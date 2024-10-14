@@ -66,8 +66,8 @@ class CartItemRepository extends BaseRepository implements ICartItemRepository
                 'updated_at' => $group->first()->updated_at,
                 ];
             })
-            ->values()
-            ->all();
+            ->values();
+
     }
 
 }

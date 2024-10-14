@@ -2,12 +2,13 @@
 
 namespace App\Providers;
 
-
+use App\Models\CartItem;
 use App\Models\Order;
 
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 use Illuminate\Support\Facades\Gate;
 use App\Models\User;
+use App\Policies\CartItemPolicy;
 use App\Policies\OrderPolicy;
 
 class AuthServiceProvider extends ServiceProvider
@@ -19,6 +20,7 @@ class AuthServiceProvider extends ServiceProvider
      */
     protected $policies = [
         Order:: class=> OrderPolicy::class,
+        CartItem:: class => CartItemPolicy::class,
     ];
 
     /**

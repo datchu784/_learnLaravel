@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\CartItemEditRequest;
 use App\Http\Requests\CartItemRequest;
+use App\Models\CartItem;
 use App\Services\CartItemService;
 
 
@@ -35,6 +36,7 @@ class CartItemController extends BaseApiController
 
     public function destroy($id)
     {
+        $this->authorize('delete', [CartItem::class, $id]);
         $this->destroyAuthenticated($id);
         return response()->json(['message' => 'Item deleted successfully'], 204);
     }

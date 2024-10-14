@@ -73,7 +73,7 @@ class CartItemService extends BaseService
 
     public function deleteForCurrentUser($id)
     {
-        return  $this->repository->delete($id) ;
+        return  $this->repository->delete($id);
     }
 
 

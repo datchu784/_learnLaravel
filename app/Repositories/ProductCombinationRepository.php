@@ -31,7 +31,7 @@ class ProductCombinationRepository extends BaseRepository implements IProductCom
                 'attribute_values.value as attribute_value',
                 'product_combinations.price as product_price',
                 'product_combinations.stock as stock',
-                'product_combinations.id as combination_id',
+                 'product_combinations.id as product_combination_id',
                 'product_images.path as productImages_path'
             )
             ->get();
@@ -50,7 +50,7 @@ class ProductCombinationRepository extends BaseRepository implements IProductCom
             ->groupBy('combination_id')
             ->map(function ($group) {
                 return [
-                    'product_combination_id' => $group->first()->combination_id,
+                    'product_combination_id' => $group->first()->product_combination_id,
                     'product_name' => $group->first()->product_name,
                     'product_description' => $group->first()->product_description,
                     'attributes' => $group->pluck('attribute_value', 'attribute_name')->toArray(),
@@ -82,7 +82,7 @@ class ProductCombinationRepository extends BaseRepository implements IProductCom
                 'attribute_values.value as attribute_value',
                 'product_combinations.price as product_price',
                 'product_combinations.stock as stock',
-                'product_combinations.id as combination_id',
+                'product_combinations.id as product_combination_id',
                 'product_images.path as productImages_path'
             )
             ->get();

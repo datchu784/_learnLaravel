@@ -31,5 +31,13 @@ class OrderController extends BaseApiController
         return response()->json($items);
     }
 
+    public function update(Request $request, $id)
+    {
+
+
+        $item = $this->updateBase( $request,$id);
+        return response()->json($item, 200);
+    }
+
 
 }

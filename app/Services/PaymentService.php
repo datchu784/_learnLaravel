@@ -50,7 +50,7 @@ class PaymentService extends BaseService
             $orders=[
                 'user_id'=>$userId,
                 'total_amount'=> 0,
-                'status'=> 'yet received goods',
+                'status'=> 'pending',
             ];
             $order = $this->orderRepo->create($orders);
             foreach($orderDetails as $orderDetail)

@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Order;
 use App\Services\OrderService;
-
+use Illuminate\Http\Request;
 
 class OrderController extends BaseApiController
 {
@@ -21,6 +21,14 @@ class OrderController extends BaseApiController
         $item = $this->showAuthenticated($id);
 
         return response()->json($item);
+    }
+
+    public function orderStatus(Request $request)
+    {
+        $status = $request->keyword;
+        $items = $this->service->orderStatus($status);
+
+        return response()->json($items);
     }
 
 

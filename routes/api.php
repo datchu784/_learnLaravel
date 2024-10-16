@@ -9,6 +9,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\CartItemController;
 use App\Http\Controllers\OrderController;
+use App\Http\Controllers\OrderDetailController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\ProductAttributeController;
@@ -40,6 +41,7 @@ Route::group([
     Route::apiResource('cart-items', CartItemController::class)->except('show');
     Route::get('users/self', [UserController::class, 'getSelf']);
     Route::get('orders/index',[OrderController::class, 'indexAuthenticated']);
+    Route::get('orders/status', [OrderController::class, 'orderStatus']);
     Route::get('orders/show/{id}', [OrderController::class, 'showAuthenticated']);
     Route::delete('orders/{id}', [OrderController::class, 'destroyAuthenticated']);
     Route::post('payments', [PaymentController::class, 'store']);

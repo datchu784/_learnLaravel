@@ -19,4 +19,12 @@ class OrderService extends BaseService
         $orderDetail = $this->repository->joinOrderDetail($id, $userId);
         return $orderDetail;
     }
+
+    public function orderStatus($status)
+    {
+        $userId = $this->getCurrentUserId();
+        $items = $this->repository->orderStatus($userId,$status);
+
+        return $items;
+    }
 }

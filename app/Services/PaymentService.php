@@ -2,6 +2,8 @@
 
 namespace App\Services;
 
+use App\Repositories\Interfaces\ICartItemRepository;
+use App\Repositories\Interfaces\ICartRepository;
 use App\Repositories\Interfaces\IOrderDetailRepository;
 use App\Repositories\Interfaces\IOrderRepository;
 use App\Repositories\Interfaces\IPaymentRepository;
@@ -17,19 +19,25 @@ class PaymentService extends BaseService
     public $userRepo;
     public $productRepo;
     public $orderDetailRepo;
+    protected $cartItemRepo;
+    protected $cartRepo;
 
     public function __construct(
         IPaymentRepository $repository,
         IOrderRepository $orderRepo,
         IUserRepository $userRepo,
         IProductCombinationRepository $productRepo,
-        IOrderDetailRepository $orderDetailRepo)
+        IOrderDetailRepository $orderDetailRepo,
+        ICartItemRepository $cartItemRepo,
+        ICartRepository $cartRepo)
     {
         $this->repository = $repository;
         $this->orderRepo = $orderRepo;
         $this->userRepo = $userRepo;
         $this->productRepo = $productRepo;
         $this->orderDetailRepo = $orderDetailRepo;
+        $this->cartItemRepo = $cartItemRepo;
+        $this->cartRepo = $cartRepo;
     }
 
     public function createPayment(array $payment, array $orderDetails)
@@ -50,6 +58,26 @@ class PaymentService extends BaseService
                 $orderDetail['order_id'] = $order->id;
                 $payment['order_id'] = $orderDetail['order_id'];
                 $product = $this->productRepo->getById($orderDetail['product_combination_id']);
+
+                $cart = $this->cartRepo->getAllForUser($userId);
+                $cartItem = $this->cartItemRepo->getCartItem($cart->first()->id)
+                ->where('product_combination_id',$orderDetail['product_combination_id'])->first();
+                if($cartItem)
+                {
+                    $cartItem->quantity -=  $orderDetail['quantity'];
+                }
+
+                if($cartItem->quantity == 0)
+                {
+                    $this->cartItemRepo->model->destroy($cartItem->id);
+                }
+                else
+                {
+                    $cartItem->save();
+                }
+
+
+
                 if($product->stock >= $orderDetail['quantity'])
                 {
                     $orderDetail['price'] = $product->price * $orderDetail['quantity'];

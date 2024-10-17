@@ -109,6 +109,24 @@ class ProductService extends BaseService
         }
     }
 
+    public function updateImage($id, $request)
+    {
+        $product = $this->repository->getByid($id);
+        $url= $product->url;
+        $url = ltrim($url, '/storage/');
+
+        $disk = 'public';
+        if (Storage::disk($disk)->exists($url)) {
+            Storage::disk($disk)->delete($url);
+        }
+
+        $productImageUpload = $this->uploadImage($request);
+
+        $product->url = $productImageUpload;
+        $product->save();
+        return $product;
+    }
+
 
 
 }

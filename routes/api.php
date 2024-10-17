@@ -58,6 +58,7 @@ Route::group(['middleware'=> 'auth:api','check.role:manage-roles'], function ($r
         Route::apiResource('user-permissions', UserPermissionController::class);
         Route::put('products/quantity', [ProductController::class, 'updateQuantityProduct']);
         Route::apiResource('products', ProductController::class)->except(['index', 'show']);
+        Route::post('products/updateImage/{id}', [ProductController::class, 'updateImage']);
         Route::apiResource('product-types', ProductTypeController::class)->except(['index', 'show']);
         Route::apiResource('orders', OrderController::class)->except(['store', 'destroy'])
         ->middleware('ddos','csrf');

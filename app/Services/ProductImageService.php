@@ -43,7 +43,7 @@ class ProductImageService extends BaseService
             $permitted = ['png', 'jpg', 'svg', 'jpeg'];
 
             if (in_array(strtolower($fileExtension), $permitted)) {
-                if ($fileSize < 10000000) {
+                if ($fileSize < 10000000) { //10.000.000 byte. ,10.000.000 byte ÷ 1024 byte/KB ≈ 9765.62 KB
                     $fileNameEnd = time() . '_' . Str::random(10) . '_' . $fileName;
                     $path = $file->storeAs('public/images', $fileNameEnd);
 
@@ -99,7 +99,7 @@ class ProductImageService extends BaseService
 
             if(in_array(strtolower($fileExtension), $permitted))
             {
-                if($fileSize < 100000)
+                if($fileSize < 10000000)
                 {
                     $fileNameEnd = time().'_'.Str::random(10). '_'.$fileName;
                     $path = $file->storeAs('public/images',$fileNameEnd);

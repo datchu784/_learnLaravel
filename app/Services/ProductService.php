@@ -6,7 +6,8 @@ use App\Repositories\Interfaces\IAttributeRepository;
 use App\Repositories\Interfaces\IProductAttributeRepository;
 use App\Repositories\Interfaces\IProductRepository;
 use App\Repositories\Interfaces\IProductTypeRepository;
-
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Storage;
 
 use Illuminate\Support\Facades\DB;
 use Exception;
@@ -78,6 +79,34 @@ class ProductService extends BaseService
     public function getById($id)
     {
          return $this->productAttributeRepo->joinToFilter()->where("product_id", $id);
+    }
+
+
+
+    public function uploadImage($request)
+    {
+        if ($request->hasFile('file')) {
+            $file = $request->file('file');
+            $fileName = $file->getClientOriginalName();
+            $fileExtension = $file->getClientOriginalExtension();
+            $fileSize = $file->getSize();
+
+            $permitted = ['png', 'jpg', 'svg', 'jpeg'];
+
+            if (in_array(strtolower($fileExtension), $permitted)) {
+                if ($fileSize < 10000000) {
+                    $fileNameEnd = time() . '_' . Str::random(10) . '_' . $fileName;
+                    $path = $file->storeAs('public/images', $fileNameEnd);
+
+                    $url = Storage::url($path);
+                    return $url;
+                } else {
+                    throw new Exception('File size is too large');
+                }
+            } else {
+                return null;
+            }
+        }
     }
 
 

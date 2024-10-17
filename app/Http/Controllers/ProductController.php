@@ -18,6 +18,8 @@ class ProductController extends BaseApiController
 
     public function store(ProductRequest $request): JsonResponse
     {
+        $product = $this->service->uploadImage($request);
+        $request->merge(['url' => $product]);
         return $this->storeBase($request);
     }
 

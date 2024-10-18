@@ -104,7 +104,7 @@ class ProductService extends BaseService
                     throw new Exception('File size is too large');
                 }
             } else {
-                return null;
+                throw new Exception('File extension is not valid');;
             }
         }
     }

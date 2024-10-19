@@ -21,9 +21,14 @@ class ProductAttributeRepository extends BaseRepository implements IProductAttri
             ->join('attributes', 'attribute_values.attribute_id', '=', 'attributes.id')
             ->join('product_combinations', 'product_attributes.product_combination_id', '=', 'product_combinations.id')
             ->join('products', 'product_combinations.product_id', '=', 'products.id')
-            ->leftJoin('product_images', function ($join) {
-                $join->on('product_images.product_combination_id', '=', 'product_combinations.id')->where('product_images.main', 1);
+            ->leftJoin('product_images as main_image', function ($join) {
+                $join->on('main_image.product_combination_id', '=', 'product_combinations.id')
+                ->where('main_image.main', 1);
             })
+            ->leftJoin('product_images as other_images', function ($join) {
+            $join->on('other_images.product_combination_id', '=', 'product_combinations.id')
+            ->where('other_images.main', 0);
+        })
             ->select(
                 'products.name as product_name',
                 'attributes.name as attribute_name',
@@ -31,7 +36,8 @@ class ProductAttributeRepository extends BaseRepository implements IProductAttri
                 'product_combinations.price as product_price',
                 'product_combinations.stock as stock',
                 'product_combinations.id as combination_id',
-                'product_images.path as product_image',
+                'main_image.path as main_image',
+                'other_images.path as other_image',
                  'products.id as product_id'
             );
 
@@ -58,12 +64,13 @@ class ProductAttributeRepository extends BaseRepository implements IProductAttri
         ->groupBy('combination_id')
         ->map(function ($group) {
             return [
-                'product_combination_id'=> $group->first()->combination_id,
+                'producombination_id'=> $group->first()->combination_id,
                 'product_name' => $group->first()->product_name,
                 'attributes' => $group->pluck('attribute_value', 'attribute_name')->toArray(),
                 'product_price' => $group->first()->product_price,
                 'stock' => $group->first()->stock,
-                'product_image' => $group->first()->product_image ?? '/storage/images/default.png',
+                'main_image' => $group->first()->main_image ?? '/storage/images/default.png',
+                'other_images' => $group->pluck('other_image')->filter()->unique()->values(),
                 'product_id' => $group->first()->product_id
             ];
         })

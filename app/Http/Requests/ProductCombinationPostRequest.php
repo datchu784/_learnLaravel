@@ -26,9 +26,9 @@ class ProductCombinationPostRequest extends FormRequest
     {
         return [
 
-            'product_id' => 'required|integer|max:10000',
-            'price' => 'required|numeric|max:10000',
-
+            'product.product_id' => 'required|integer|max:10000',
+            'product.price' => 'required|numeric|max:10000',
+            'attributes.*.attribute_value_id' => 'required|string|max: 255'
 
         ];
     }
@@ -37,7 +37,8 @@ class ProductCombinationPostRequest extends FormRequest
         return [
 
             'product_id.required' => 'product_id is required',
-            'price_id.required' => 'Price is required',
+            'price.required' => 'price is required',
+            'attributes.*.attribute_value_id' => 'attributes.*.value'
 
 
         ];

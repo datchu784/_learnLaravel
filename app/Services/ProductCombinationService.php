@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Repositories\Interfaces\IProductAttributeRepository;
 use App\Repositories\Interfaces\IProductCombinationRepository;
 use App\Repositories\Interfaces\IProductRepository;
 use App\Repositories\Interfaces\IProductTypeRepository;
@@ -12,21 +13,37 @@ class ProductCombinationService extends BaseService
 {
     protected  $productTypeRepository;
     protected  $productRepo;
+    protected  $productAttributeRepo;
 
     public function __construct(
         IProductCombinationRepository $repository,
         IProductTypeRepository $productTypeRepository,
-        IProductRepository $productRepo)
+        IProductRepository $productRepo,
+        IProductAttributeRepository $productAttributeRepo)
     {
         $this->repository = $repository;
         $this->productTypeRepository = $productTypeRepository;
         $this->productRepo= $productRepo;
+        $this->productAttributeRepo = $productAttributeRepo;
     }
 
     public function paginate($perPage = 4)
     {
         $products = $this->repository->joinImage($perPage);
         return $products;
+    }
+
+    public function create(array $data)
+    {
+        $product = $this->repository->create($data['product']);
+        foreach($data['attribute'] as $atribute)
+        {
+            $atribute['product_combination_id'] = $product->id;
+            $this->productAttributeRepo->create($atribute);
+        }
+
+        $product->productAttributes;
+        return $product;
     }
 
     public function getById($id)

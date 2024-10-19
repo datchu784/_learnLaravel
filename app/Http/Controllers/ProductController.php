@@ -61,6 +61,12 @@ class ProductController extends BaseApiController
         return response()->json($this->service->filter($data, $id));
 
     }
+
+    public function getAll()
+    {
+        $items = $this->service->getAll();
+        return response()->json($items);
+    }
 }
 
 

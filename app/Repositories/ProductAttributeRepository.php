@@ -65,7 +65,7 @@ class ProductAttributeRepository extends BaseRepository implements IProductAttri
         ->map(function ($group) {
             return [
                 'producombination_id'=> $group->first()->combination_id,
-                'product_name' => $group->first()->product_name,
+                'product_name' => $group->first()->product_name,                                                                                                                                                                                                                                                                                                       
                 'attributes' => $group->pluck('attribute_value', 'attribute_name')->toArray(),
                 'product_price' => $group->first()->product_price,
                 'stock' => $group->first()->stock,

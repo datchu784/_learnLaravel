@@ -36,7 +36,7 @@ class ProductCombinationService extends BaseService
     public function create(array $data)
     {
         $product = $this->repository->create($data['product']);
-        foreach($data['attribute'] as $atribute)
+        foreach($data['attributes'] as $atribute)
         {
             $atribute['product_combination_id'] = $product->id;
             $this->productAttributeRepo->create($atribute);

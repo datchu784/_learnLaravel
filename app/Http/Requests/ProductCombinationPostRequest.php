@@ -28,7 +28,8 @@ class ProductCombinationPostRequest extends FormRequest
 
             'product.product_id' => 'required|integer|max:10000',
             'product.price' => 'required|numeric|max:10000',
-            'attributes.*.attribute_value_id' => 'required|string|max: 255'
+            'attributes' => 'required|array|min:1',
+            'attributes.*.attribute_value_id' => 'required|integer|max: 255'
 
         ];
     }

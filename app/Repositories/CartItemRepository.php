@@ -27,9 +27,7 @@ class CartItemRepository extends BaseRepository implements ICartItemRepository
         ->join('product_attributes', 'product_attributes.product_combination_id', '=', 'product_combinations.id')
         ->join('attribute_values', 'product_attributes.attribute_value_id', '=', 'attribute_values.id')
         ->join('attributes', 'attribute_values.attribute_id', '=', 'attributes.id')
-        ->leftJoin('product_images', function ($join) {
-            $join->on('product_images.product_combination_id', '=', 'product_combinations.id')->where('product_images.main', 1);
-        })
+        
         ->select(
             'cart_items.id as cart_item_id',
             'products.name as product_name',

@@ -14,7 +14,7 @@ class ProductAttributeRepository extends BaseRepository implements IProductAttri
         $this->model = $model;
     }
 
-    public function joinToFilter($sort_by=null, $order = 'asc')
+    public function joinToFilter($sort_by = null, $order = 'asc')
     {
         $query = $this->model
             ->join('attribute_values', 'product_attributes.attribute_value_id', '=', 'attribute_values.id')
@@ -23,12 +23,12 @@ class ProductAttributeRepository extends BaseRepository implements IProductAttri
             ->join('products', 'product_combinations.product_id', '=', 'products.id')
             ->leftJoin('product_images as main_image', function ($join) {
                 $join->on('main_image.product_combination_id', '=', 'product_combinations.id')
-                ->where('main_image.main', 1);
+                    ->where('main_image.main', 1);
             })
             ->leftJoin('product_images as other_images', function ($join) {
-            $join->on('other_images.product_combination_id', '=', 'product_combinations.id')
-            ->where('other_images.main', 0);
-        })
+                $join->on('other_images.product_combination_id', '=', 'product_combinations.id')
+                    ->where('other_images.main', 0);
+            })
             ->select(
                 'products.name as product_name',
                 'attributes.name as attribute_name',
@@ -38,13 +38,12 @@ class ProductAttributeRepository extends BaseRepository implements IProductAttri
                 'product_combinations.id as combination_id',
                 'main_image.path as main_image',
                 'other_images.path as other_image',
-                 'products.id as product_id'
+                'products.id as product_id'
             );
 
-            if($sort_by)
-            {
-               $query->orderBy($sort_by, $order);
-            }
+        if ($sort_by) {
+            $query->orderBy($sort_by, $order);
+        }
         $products = $query->get();
 
 
@@ -61,21 +60,21 @@ class ProductAttributeRepository extends BaseRepository implements IProductAttri
     public function map($products)
     {
         return $products
-        ->groupBy('combination_id')
-        ->map(function ($group) {
-            return [
-                'producombination_id'=> $group->first()->combination_id,
-                'product_name' => $group->first()->product_name,                                                                                                                                                                                                                                                                                                       
-                'attributes' => $group->pluck('attribute_value', 'attribute_name')->toArray(),
-                'product_price' => $group->first()->product_price,
-                'stock' => $group->first()->stock,
-                'main_image' => $group->first()->main_image ?? '/storage/images/default.png',
-                'other_images' => $group->pluck('other_image')->filter()->unique()->values(),
-                'product_id' => $group->first()->product_id
-            ];
-        })
-        // nếu dùng all() thì sẽ trả về array, mà chỉ muốn trả về colection nên không dùng all()
-        ->values();
+            ->groupBy('combination_id')
+            ->map(function ($group) {
+                return [
+                    'producombination_id' => $group->first()->combination_id,
+                    'product_name' => $group->first()->product_name,
+                    'attributes' => $group->pluck('attribute_value', 'attribute_name')->toArray(),
+                    'product_price' => $group->first()->product_price,
+                    'stock' => $group->first()->stock,
+                    'main_image' => $group->first()->main_image ?? '/storage/images/default.png',
+                    'other_images' => $group->pluck('other_image')->filter()->unique()->values(),
+                    'product_id' => $group->first()->product_id
+                ];
+            })
+            // nếu dùng all() thì sẽ trả về array, mà chỉ muốn trả về colection nên không dùng all()
+            ->values();
     }
 
 
@@ -84,5 +83,4 @@ class ProductAttributeRepository extends BaseRepository implements IProductAttri
     {
         return $this->model->find($id);
     }
-
 }

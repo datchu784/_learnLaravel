@@ -25,4 +25,10 @@ class AttributeValueController extends BaseApiController
     {
         return $this->updateBase($request, $id);
     }
+
+    public function getAll()
+    {
+        $items = $this->service->getAll();
+        return response()->json($items);
+    }
 }

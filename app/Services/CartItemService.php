@@ -28,7 +28,6 @@ class CartItemService extends BaseService
         //     $cartItem->product;
         // }
         return $cartItems;
-
     }
 
     public function getByIdForCurrentUser($id)
@@ -43,22 +42,16 @@ class CartItemService extends BaseService
         $cart = $this->cartRepo->getAllForUser($userId);
 
         $cartItem = $cart->first()->cartItems
-        ->where('product_combination_id',$data['product_combination_id'])->first();
-        if(!$cartItem)
-        {
-            if ($cart)
-            {
+            ->where('product_combination_id', $data['product_combination_id'])->first();
+        if (!$cartItem) {
+            if ($cart) {
                 $data['cart_id'] = $cart->first()->id;
             }
             return $this->repository->create($data);
-
-        }
-        else
-        {
+        } else {
             $cartItem->quantity += $data['quantity'];
             $cartItem->save();
         }
-
     }
 
     public function updateForCurrentUser($id, array $data)
@@ -75,9 +68,4 @@ class CartItemService extends BaseService
     {
         return  $this->repository->delete($id);
     }
-
-
-
-
-
 }

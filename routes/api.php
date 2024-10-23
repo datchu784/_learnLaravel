@@ -66,7 +66,9 @@ Route::group(['middleware'=> 'auth:api','check.role:manage-roles'], function ($r
         Route::put('product-images/main/{id}', [ProductImageController::class, 'changeMain']);
         Route::post('product-images/{id}', [ProductImageController::class, 'updateImage']);
         Route::apiResource('product-images', ProductImageController::class)->except(['show', 'index', 'update']);
+        Route::get('attribute-values/all', [AttributeValueController::class, 'getAll']);
         Route::apiResource('attribute-values', AttributeValueController::class)->except('index');
+
         Route::put('product-combinations/quantity', [ProductCombinationController::class, 'updateQuantityProduct']);
         Route::apiResource('product-combinations', ProductCombinationController::class)->except('index');
         Route::apiResource('attributes', AttributeController::class)->except('index');

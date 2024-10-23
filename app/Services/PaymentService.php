@@ -29,8 +29,8 @@ class PaymentService extends BaseService
         IProductCombinationRepository $productRepo,
         IOrderDetailRepository $orderDetailRepo,
         ICartItemRepository $cartItemRepo,
-        ICartRepository $cartRepo)
-    {
+        ICartRepository $cartRepo
+    ) {
         $this->repository = $repository;
         $this->orderRepo = $orderRepo;
         $this->userRepo = $userRepo;
@@ -42,66 +42,53 @@ class PaymentService extends BaseService
 
     public function createPayment(array $payment, array $orderDetails)
     {
-        DB:: beginTransaction();
-        try{
+        DB::beginTransaction();
+        try {
             $userId = $this->getCurrentUserId();
             $payment['sender_id'] = $userId;
 
-            $orders=[
-                'user_id'=>$userId,
-                'total_amount'=> 0,
-                'status'=> 'pending',
+            $orders = [
+                'user_id' => $userId,
+                'total_amount' => 0,
+                'status' => 'pending',
             ];
             $order = $this->orderRepo->create($orders);
-            foreach($orderDetails as $orderDetail)
-            {
+            foreach ($orderDetails as $orderDetail) {
                 $orderDetail['order_id'] = $order->id;
                 $payment['order_id'] = $orderDetail['order_id'];
                 $product = $this->productRepo->getById($orderDetail['product_combination_id']);
 
                 $cart = $this->cartRepo->getAllForUser($userId);
                 $cartItem = $this->cartItemRepo->getCartItem($cart->first()->id)
-                ->where('product_combination_id',$orderDetail['product_combination_id'])->first();
-                if($cartItem)
-                {
+                    ->where('product_combination_id', $orderDetail['product_combination_id'])->first();
+                if ($cartItem) {
                     $cartItem->quantity -=  $orderDetail['quantity'];
                 }
 
-                if($cartItem->quantity == 0)
-                {
+                if ($cartItem->quantity == 0) {
                     $this->cartItemRepo->model->destroy($cartItem->id);
-                }
-                else
-                {
+                } else {
                     $cartItem->save();
                 }
 
-
-
-                if($product->stock >= $orderDetail['quantity'])
-                {
+                if ($product->stock >= $orderDetail['quantity']) {
                     $orderDetail['price'] = $product->price * $orderDetail['quantity'];
                     $product->stock -= $orderDetail['quantity'];
                     $order->total_amount += $orderDetail['price'];
                     $this->orderDetailRepo->create($orderDetail);
                     $product->save();
-                }
-                else
-                {
+                } else {
                     throw new Exception('Số lượng sản phẩm không đủ');
                 }
-           }
+            }
 
-            if($payment['amount'] != $order->total_amount)
-            {
+            if ($payment['amount'] != $order->total_amount) {
                 throw new Exception('Tính sai total_amount');
-
             }
             $order->save();
 
             $user = $this->userRepo->getById($userId);
-            if($user['money'] < $payment['amount'] )
-            {
+            if ($user['money'] < $payment['amount']) {
                 throw new Exception('Không đủ tiền');
             }
 
@@ -114,16 +101,11 @@ class PaymentService extends BaseService
 
             $payment = $this->repository->create($payment);
 
-            DB:: commit();
+            DB::commit();
             return $payment;
-
-
-        }
-        catch(Exception $e){
-            DB:: rollBack();
+        } catch (Exception $e) {
+            DB::rollBack();
             throw $e;
-
         }
-
     }
 }

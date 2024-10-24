@@ -25,4 +25,10 @@ class AttributeController extends BaseApiController
     {
         return $this->updateBase($request, $id);
     }
+
+    public function index()
+    {
+        $items = $this->service->getAll();
+        return response()->json($items);
+    }
 }

@@ -13,4 +13,15 @@ class AttributeValueRepository extends BaseRepository implements IAttributeValue
     {
         $this->model = $model;
     }
+
+    public function getAll()
+    {
+        $attributeValues =  $this->model->all();
+        foreach($attributeValues as $attributeValue)
+        {
+            $attributeValue->attribute;
+        }
+
+        return $attributeValues;
+    }
 }

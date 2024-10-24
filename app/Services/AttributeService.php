@@ -11,4 +11,10 @@ class AttributeService extends BaseService
     {
         $this->repository = $repository;
     }
+
+    public function create(array $data)
+    {
+        //$data['name'] = strtolower($data['name']);
+        return $this->repository->create($data);
+    }
 }

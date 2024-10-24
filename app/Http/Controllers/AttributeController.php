@@ -18,6 +18,7 @@ class AttributeController extends BaseApiController
     }
     public function store(AttributeRequest $request): JsonResponse
     {
+        
         return $this->storeBase($request);
     }
 

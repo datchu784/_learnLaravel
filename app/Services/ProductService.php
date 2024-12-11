@@ -22,13 +22,12 @@ class ProductService extends BaseService
         IProductRepository $repository,
         IProductTypeRepository $productTypeRepository,
         IProductAttributeRepository $productAttributeRepo,
-        IAttributeRepository $attributeRepo)
-    {
+        IAttributeRepository $attributeRepo
+    ) {
         $this->repository = $repository;
         $this->productTypeRepository = $productTypeRepository;
         $this->productAttributeRepo = $productAttributeRepo;
         $this->attributeRepo = $attributeRepo;
-
     }
 
     public function searchProducts($keyword)
@@ -57,7 +56,7 @@ class ProductService extends BaseService
         }
     }
 
-    public function filter($data,$id)
+    public function filter($data, $id)
     {
         $filteredProducts  = $this->getById($id);
 
@@ -78,7 +77,7 @@ class ProductService extends BaseService
 
     public function getById($id)
     {
-         return $this->productAttributeRepo->joinToFilter()->where("product_id", $id);
+        return $this->productAttributeRepo->joinToFilter()->where("product_id", $id);
     }
 
 
@@ -112,7 +111,7 @@ class ProductService extends BaseService
     public function updateImage($id, $request)
     {
         $product = $this->repository->getByid($id);
-        $url= $product->url;
+        $url = $product->url;
         $url = ltrim($url, '/storage/');
 
         $disk = 'public';
@@ -126,10 +125,4 @@ class ProductService extends BaseService
         $product->save();
         return $product;
     }
-
-
-
 }
-
-
-

@@ -54,6 +54,10 @@ class ProductAttributeService extends BaseService
                 $filteredProducts  = $this->repository->joinToFilter($data['sort_by']);
             }
         }
+        else
+        {
+            $filteredProducts  = $this->repository->joinToFilter();
+        }
         //$filteredProducts  = $this->repository->joinToFilter();
 
         $attributes = $this->attributeRepo->getAll();
